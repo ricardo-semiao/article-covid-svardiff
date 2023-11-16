@@ -1,0 +1,74 @@
+% Custom cite links
+\DeclareFieldFormat{citehyperref}{%
+  \DeclareFieldAlias{bibhyperref}{noformat}% Avoid nested links
+  \bibhyperref{#1}}
+
+\DeclareFieldFormat{textcitehyperref}{%
+  \DeclareFieldAlias{bibhyperref}{noformat}% Avoid nested links
+  \bibhyperref{%
+    #1%
+    \ifbool{cbx:parens}
+      {\bibcloseparen\global\boolfalse{cbx:parens}}
+      {}}}
+
+\savebibmacro{cite}
+\savebibmacro{textcite}
+
+\renewbibmacro*{cite}{%
+  \printtext[citehyperref]{%
+    \restorebibmacro{cite}%
+    \usebibmacro{cite}}}
+
+\renewbibmacro*{textcite}{%
+  \ifboolexpr{
+    ( not test {\iffieldundef{prenote}} and
+      test {\ifnumequal{\value{citecount}}{1}} )
+    or
+    ( not test {\iffieldundef{postnote}} and
+      test {\ifnumequal{\value{citecount}}{\value{citetotal}}} )
+  }
+    {\DeclareFieldAlias{textcitehyperref}{noformat}}
+    {}%
+  \printtext[textcitehyperref]{%
+    \restorebibmacro{textcite}%
+    \usebibmacro{textcite}}}
+
+% -- Change chapter style
+
+\chapterstyle{section}
+%\makeatletter
+%\renewcommand\chapter{\@startsection {chapter}{0}{\z@}%
+%                                   {-4.5ex \@plus -1ex \@minus -.2ex}%
+%                                   {3.3ex \@plus.2ex}%
+%                                   {\normalfont\LARGE\bfseries}}
+%\makeatletter
+\renewcommand*{\chapnumfont}{\normalfont\LARGE\bfseries}
+\renewcommand*{\chaptitlefont}{\normalfont\LARGE\bfseries}
+
+\setlength{\afterchapskip}{0.5\baselineskip}
+\setlength{\beforechapskip}{2\baselineskip}
+
+% Capítulo sem pular pag
+
+
+
+% Configurações de aparência do PDF final
+\makeatletter
+\hypersetup{
+     	%pagebackref=true,
+		pdftitle={\@title}, 
+		pdfauthor={\@author},
+    	pdfsubject={\imprimirpreambulo}
+}
+\makeatother
+
+\newcommand{\mytitle}[2]{\begin{center}#1\textbf{#2}\par\end{center}}
+
+% avoid footnotes restart numberig
+\usepackage{remreset}
+\makeatletter
+\@removefromreset{footnote}{chapter}
+\newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother
+
+\endinput 

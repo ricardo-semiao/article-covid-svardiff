@@ -1,0 +1,6 @@
+PWD c:/Users/ricar/OneDrive/Alpha Drive/Trabalho/Artigos/TCC graduacao/Latex
+INPUT c:/Users/ricar/AppData/Roaming/TinyTeX/texmf.cnf
+INPUT c:/Users/ricar/AppData/Roaming/TinyTeX/texmf-dist/web2c/texmf.cnf
+INPUT c:/Users/ricar/AppData/Roaming/TinyTeX/texmf-var/web2c/pdftex/pdflatex.fmt
+INPUT c:/Users/ricar/OneDrive/Alpha Drive/Trabalho/Artigos/TCC graduacao/Latex/main.tex
+OUTPUT main.log

@@ -1,0 +1,33 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.11.16)  16 NOV 2023 17:53
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**"c:/Users/ricar/OneDrive/Alpha Drive/Trabalho/Artigos/TCC graduacao/Latex/main.tex"
+(c:/Users/ricar/OneDrive/Alpha Drive/Trabalho/Artigos/TCC graduacao/Latex/main.tex
+LaTeX2e <2023-11-01>
+L3 programming layer <2023-11-09>
+
+! LaTeX Error: File `abntex2.cls' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: cls)
+
+Enter file name: 
+c:/Users/ricar/OneDrive/Alpha Drive/Trabalho/Artigos/TCC graduacao/Latex/main.tex:11: Emergency stop.
+<read *> 
+         
+l.11 \usepackage
+                [T1]{fontenc}		% Selecao de codigos de fonte.^^M
+*** (cannot \read from terminal in nonstop modes)
+
+ 
+Here is how much of TeX's memory you used:
+ 22 strings out of 476226
+ 666 string characters out of 5794566
+ 1923558 words of memory out of 5000000
+ 22078 multiletter control sequences out of 15000+600000
+ 558069 words of font info for 36 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 19i,0n,29p,174b,17s stack positions out of 10000i,1000n,20000p,200000b,200000s
+c:/Users/ricar/OneDrive/Alpha Drive/Trabalho/Artigos/TCC graduacao/Latex/main.tex:11:  ==> Fatal error occurred, no output PDF file produced!

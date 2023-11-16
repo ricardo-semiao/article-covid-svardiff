@@ -1,0 +1,23 @@
+====== ARTIGOS POR TEMA =======
+VARIANTE
+https://www.medrxiv.org/content/10.1101/2020.05.03.20089508v2
+https://journals.asm.org/doi/10.1128/mSystems.00700-20
+
+LIMITAÇÃO DOS DADOS
+https://www.pnas.org/doi/10.1073/pnas.2008410117:
+Numbers of deaths may be more reliable than the numbers of cases (asymptomatic cases, availability and sensitivity of diagnostic tests, overwhelmed and unpreparedhealth systems/surveilance fatigue). media reports sugest consistent underreporting of COVID-19 deaths globally.
+
+PAÍSES PEQUENOS
+https://peerj.com/articles/10112/#p-8
+In smaller states (i.e., <0.5 million inhabitants), the rate of erroneous identification of COVID-19 deaths may be particularly high due to the lack of expertise, measuring devices and experience. Moreover, in such microstates small absolute changes in COVID-19 deaths may result in extreme values of relative indices
+
+TEMPERATURA
+https://www.sciencedirect.com/science/article/pii/S0048969720322956?casa_token=xCF_mNkYTu4AAAAA:oXV8IrVB23XTTlvK24iD6jvnmUuPLv9iCUhF-Wa-XS_fVXHVx7vcojZlProFGpSg8l6vWJEM1pg
+
+OUTROS
+Effect of Delta variant on viral burden and vaccine effectiveness:
+https://www.nature.com/articles/s41591-021-01548-7?ref=tjournal.ru&fbclid=IwAR1ERLCiyoCF0q0kxenUkOPHzoIUBG0hGKUD2aY6LmGJfonT4ylHnd8Azo8
+
+Smoothing:
+https://www.dallasfed.org/research/basics/moving.aspx
+https://towardsdatascience.com/five-wrong-ways-to-do-covid-19-data-smoothing-1538db6ff182
