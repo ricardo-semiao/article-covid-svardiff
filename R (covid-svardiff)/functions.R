@@ -1,23 +1,27 @@
-table_adf <- function(data) {
-  result_adf <- data %>%
-    filter(date >= date_vaccine$week) %>%
-    select(ends_with("l")) %>%
-    map_dfr(function(col) {
-      col %>%
-        tseries::adf.test() %>%
-        `[`(c("statistic", "parameter", "p.value"))
-    })
+get_basic_data <- function(data_raw, trans){
+  data_basic <- data_raw %>%
+    transmute(
+      date = date,
+      cases_s = new_cases_smoothed,
+      deaths_s = new_deaths_smoothed,
+      vaccines_s = new_vaccinations_smoothed,
+      cases_p = new_cases_smoothed_per_million,
+      deaths_p = new_deaths_smoothed_per_million,
+      vaccines_p = new_vaccinations_smoothed_per_million
+    ) %>%
+    filter(
+      !if_all(-date, is.na) & date < as.Date("2023-03-23") & cases_s + deaths_s > 0
+    ) %>%
+    na_approx() %>%
+    mutate(across(ends_with("_s"), ~ ifelse(.x == 0, 0, log(.x)), .names = "{str_remove(.col, '_s')}_l"))
   
-  result_adf %>%
-    set_names(c("Estatística", "Lag", "P-valor")) %>%
-    mutate(across(-Lag, ~ formatC(.x, digits = 2, format = "f"))) %>%
-    mutate(Variável = vars_names, .before = 1) %>%
-    stargazer(summary = FALSE, title = "Teste Dickey-Fuller Aumentado", label = "tb:testadf")
+  switch(trans,
+         "level" = select(data_basic, !matches("_p$|_l$")),
+         "prop"  = select(data_basic, !matches("_s$|_l$")),
+         "log"   = select(data_basic, !matches("_p$|_s$"))
+  )
 }
 
-pvalue.ast = function(x) {
-  c("", "*", "**", "***")[pmap_dbl(tibble(x), ~ sum(. < c(0.01, 0.05, 0.10)) + 1)]
-}
 
 na_approx <- function(data) {
   numeric_cols <- sapply(data, is.numeric)
@@ -29,51 +33,75 @@ na_approx <- function(data) {
   data
 }
 
-ccf_ba <- function(data_list, labels) {
-  data_ccf <- imap_dfr(data_list, function(df, name) {
-    confInterval <- qnorm((1 - 0.95)/2)/sqrt(nrow(df))
-    ccf_values <- ccf(df$cases_s, df$deaths_s, lag.max = (start_vaccine), plot = FALSE)
-    tibble(
-      name = as.factor(name), Lag = ccf_values$lag[,,1],
-      value = ccf_values$acf[,,1], ci = confInterval
-    )
-  })
+
+create_exogen <- function(data, include = "none") {
+  exogen <- list()
   
-  ggplot(data_ccf, aes(x = Lag, y = value)) +
-    geom_area() + 
-    geom_ribbon(aes(ymin = -ci, ymax = ci), linetype = 2, fill = NA) +
-    geom_hline(yintercept = 0) +
-    geom_vline(xintercept = 0) +
-    facet_wrap(vars(name), ncol = 3, labeller = labeller(
-      name = set_names(labels, c("Before", "After", "Afterp"))
-    )) +
-    labs(y = "Valor", x = "Lag (casos)")
+  if (include == "none") {
+    return(NULL)
+  }
+  
+  if (grepl("season", include)) {
+    exogen$season <- data %>%
+      transmute(
+        season_high = format(date, "%m") %in% c("12", "01", "02"),
+        season_mid = format(date, "%m") %in% c("10", "11", "03", "04")
+      )
+  }
+  
+  if (grepl("intramonth", include)) {
+    exogen$intramonth <- as.numeric(format(data$date, "%U")) %% 4 %>%
+      fastDummies::dummy_cols(remove_first_dummy = TRUE, remove_selected_columns = TRUE) %>%
+      set_names(c("week1", "week2", "week3"))
+  }
+  
+  bind_cols(exogen)
 }
 
-granger_ba = function(data, p, test, ...){
-  data <- map(data, ~ select(.x, !starts_with("vaccines")))
-  mods <- map(data, ~VAR(.x, p))
-  mods_vcov <- map(mods, ~vcovHC(.x, "HC1"))
+create_var <- function(data, p, slice = 1:nrow(data), remove_match = "$^", include) {
+  data <- data %>% slice(slice)
+  exogen <- create_exogen(data, include)
   
-  data_granger <- map2(mods, mods_vcov, function(mod, vcov) {
-    causality(mod, cause = "cases_s", vcov. = vcov)[[test]] %>% 
-      `[`(c("statistic", "parameter", "p.value")) %>%
-      reduce(c)
-  }) %>%
-    reduce(rbind) %>%
-    as_tibble()
-  
-  data_granger %>%
-    setNames(c("Estatística", "GL 1", "GL 2", "P-valor")) %>%
-    mutate(
-      Estatística = round(Estatística, 2),
-      across(contains("GL"), round),
-      `P-valor` = paste(round(`P-valor`, 4), pvalue.ast(`P-valor`))
-    ) %>%
-    mutate(Variável = c("Antes", "Depois", "Depois+"), .before = 1) %>%
-    stargazer(
-      summary = FALSE, title = "Causalidade de Granger",
-      label = "tb:grangerba", notes = "GL: graus de liberdade",
-      rownames = FALSE, ...
-    )
+  data %>%
+    select(-matches(remove_match)) %>%
+    VAR(p = p, exogen = exogen)
 }
+
+
+#custom_svars_irf <- function(x, ..., n.ahead = 20) 
+#{
+#  if (!(is(x, "svars"))) {
+#    stop("\nPlease provide an object of class 'svars'.\n")
+#  }
+#  if (x$type == "const") {
+#    A_hat <- x$A_hat[, -1]
+#  }
+#  else if (x$type == "trend") {
+#    A_hat <- x$A_hat[, -1]
+#  }
+#  else if (x$type == "both") {
+#    A_hat <- x$A_hat[, -c(1, 2)]
+#  }
+#  else {
+#    A_hat <- x$A_hat
+#  }
+#  A_hat <- A_hat[, (ncol(A_hat) - x$K*x$p + 1):(ncol(A_hat))]
+#  B_hat <- x$B
+#  IR <- array(unlist(svars:::IRF(A_hat, B_hat, n.ahead)), c(x$K, x$K, 
+#                                                    n.ahead))
+#  impulse <- matrix(0, ncol = dim(IR)[2]^2 + 1, nrow = dim(IR)[3])
+#  colnames(impulse) <- rep("V1", ncol(impulse))
+#  cc <- 1
+#  impulse[, 1] <- seq(0, dim(IR)[3] - 1)
+#  for (i in 1:dim(IR)[2]) {
+#    for (j in 1:dim(IR)[2]) {
+#      cc <- cc + 1
+#      impulse[, cc] <- IR[i, j, ]
+#      colnames(impulse)[cc] <- paste("epsilon[", colnames(x$y)[j], 
+#                                     "]", "%->%", colnames(x$y)[i])
+#    }
+#  }
+#  impulse <- list(irf = as.data.frame(impulse))
+#  class(impulse) <- "svarirf"
+#  return(impulse)
+#}

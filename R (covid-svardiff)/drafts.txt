@@ -1,0 +1,30 @@
+data_detrend <- map2_df(
+  select(data, -date),
+  decompose(select(data, -date) %>% as_ts())$trend %>% as.data.frame(),
+  ~ .x - .y
+) %>%
+  mutate(date = data$date, .before = 1)
+
+breaks_seasons <- rep(format(data$date, "%m") %in% c("11", "12", "01", "02", "03"), 3)
+
+ggseasons <- geom_rect(
+  aes(xmin = index, xmax = lead(index), ymin = 0, ymax = Inf, fill = breaks_seasons, serie = rep(vars_names, each = n)),
+  alpha = 0.2
+)
+
+
+# SVAR results (before)
+svar scoring forcing 100 iters:
+          cases_s  deaths_s
+cases_s   0.01607 0.000e+00
+deaths_s -0.30290 1.079e-07
+
+svar scoring 78 iters:
+          cases_s  deaths_s
+cases_s   0.01824 0.000e+00
+deaths_s -0.30290 1.248e-07
+
+svar direct:
+            cases_s deaths_s
+cases_s   3.076e-05   0.0000
+deaths_s -2.852e-03   0.1952
