@@ -103,8 +103,7 @@ create_var <- function(data, p, slice = 1:nrow(data), remove_match = "$^", inclu
 }
 
 
-custom_svars_irf <- function(x, ..., n.ahead = 20) 
-{
+custom_svars_irf <- function(x, ..., n.ahead = 20) {
   if (!(is(x, "svars"))) {
     stop("\nPlease provide an object of class 'svars'.\n")
   }
@@ -142,8 +141,7 @@ custom_svars_irf <- function(x, ..., n.ahead = 20)
 }
 
 
-custom_svars_fevd <- function (x, n.ahead = 10, ...) 
-{
+custom_svars_fevd <- function (x, n.ahead = 10, ...) {
   if (!(is(x, "svars"))) {
     stop("\nPlease provide an object of class 'svars'.\n")
   }

@@ -1,11 +1,12 @@
 # Packages and Functions --------------------------------------------------
 library(stargazer)
+library(varutils)
+library(patchwork)
 library(forecast)
 library(vars)
 library(svars)
-library(varutils)
-library(tidyverse)
 library(rlang)
+library(tidyverse)
 
 theme_set(theme_bw())
 
@@ -17,13 +18,12 @@ source("functions (package).R")
 # Parameters --------------------------------------------------------------
 week <- TRUE
 trans <- "level"
-include <- "season|intramonth" #season|intramonth|waves|intraweek
+include <- "season" #season|intramonth|waves|intraweek
 
-chol_order <- paste0(c("cases", "vaccines", "deaths"), "_", "s")
+vars_order <- paste0(c("cases", "vaccines", "deaths"), "_", "s")
 gap_size <- if (week) 4*2.5 else 30*2.5
-
-n.ahead <- 52*2
 lag.max <- if (week) 4*2.5 else 30*2.5
+n.ahead <- if (week) 53*1.5 else 365*1.5
 
 
 
@@ -32,12 +32,8 @@ lag.max <- if (week) 4*2.5 else 30*2.5
 #data_raw <- read_csv(path) %>% filter(location == "Brazil") %>% filter(row_number() >= which(!is.na(new_deaths))[1])
 #saveRDS(data_raw, "data_raw.RDS")
 
-data_raw <- readRDS("data_raw.RDS")
-
-data_basic <- get_basic_data(data_raw, trans)
-
 if (week) {
-  data <- data_basic %>%
+  data <- get_basic_data(readRDS("data_raw.RDS"), trans) %>%
     group_by(week = format(date, "%Y-%U")) %>%
     summarise(
       date = median(date),
@@ -45,70 +41,86 @@ if (week) {
     ) %>%
     select(-week)
 } else {
-  data <- data_basic
+  data <- get_basic_data(readRDS("data_raw.RDS"), trans)
 }
 
-data <- data %>% select(all_of(c("date", chol_order)))
+data <- data %>% select(all_of(c("date", vars_order)))
 
-start_vac <- select(data, starts_with("vaccines")) %>% {which(!is.na(.))[1]}
+n_vac <- select(data, starts_with("vaccines")) %>% {which(!is.na(.))[1]}
 n <- nrow(data)
 
-vars_names <- set_names(
-  c("Casos", "Mortes", "Vacinas"),
-  data %>% select(-date) %>% colnames()
+namings <- list(
+  vars = set_names(
+    c("Casos", "Mortes", "Vacinas"),
+    data %>% select(-date) %>% colnames()
+  ),
+  ba_expl = c("Antes", "Depois", "Depois+"),
+  ba_mods = set_names(
+    c("Antes", "Depois s/", "Depois c/", "Depois+ s/", "Depois+ c/"),
+    c("bf_no", "af_no", "af_vac", "afp_no", "afp_vac")
+  )
 )
 
 # Covid waves and seasons:
-breaks_waves <- as.Date(c(
-  start1 = "2021-02-21", end1 = "2021-06-22",
-  start2 = "2022-01-03", end2 = "2022-03-12"
-))
+ggwaves <- function(ind = FALSE, date = data$date) {
+  breaks_waves <- as.Date(c(
+    start1 = "2021-02-21", end1 = "2021-06-22",
+    start2 = "2022-01-03", end2 = "2022-03-12"
+  ))
+  
+  imap(breaks_waves, function(x, name) {
+    x <- as.Date(x)
+    geom_vline(
+      xintercept = if (ind) which.min(abs(date - x)) else x,
+      linetype = 2,
+      color = c("green", "red")[1 + grepl("2", name)]
+    )
+  })
+}
 
-ggwaves <- imap(breaks_waves, function(x, name) {
-  geom_vline(
-    xintercept = as.Date(x), linetype = 2, color = c("green", "red")[1 + grepl("2", name)]
-  )
-})
+# Variables S.D.'s:
+vars_sds <- map_dbl(select(data, -date), ~ sd(., na.rm = TRUE))
 
 
 
-# Exploratory Analisys ----------------------------------------------------
+# Exploratory Analysis ----------------------------------------------------
 # ---- Historic values and stacionarity ----
 # Historic values:
 ggvar_values(
   select(data, -date), index = data$date,
-  args_facet = list(scales = "free_y", ncol = 1, labeller = labeller(serie = vars_names))
+  args_facet = list(scales = "free_y", ncol = 1, labeller = labeller(serie = namings$vars))
 ) + labs(title = "Valores históricos das séries", x = "Lags", y = "Correlação") +
-  ggwaves
+  ggwaves()
 
 # Correlations:
 ggvar_acf(select(data, -date) %>% na.omit(),
-  args_facet = list(labeller = labeller(serie = vars_names))
+  args_facet = list(labeller = labeller(serie = namings$vars))
 ) + labs(title = "Auto-correlação das séries", x = "Lags", y = "Correlação")
 
 ggvar_acf(select(data, -date) %>% na.omit(), type = "partial",
-  args_facet = list(labeller = labeller(serie = vars_names))
+  args_facet = list(labeller = labeller(serie = namings$vars))
 ) + labs(title = "Auto-correlação parcial das séries", x = "Lags", y = "Correlação")
 
 ggvar_ccf(select(data, -date) %>% na.omit(),
-  args_facet = list(labeller = labeller(var_row = vars_names, var_col = vars_names))
+  args_facet = list(labeller = labeller(var_row = namings$vars, var_col = namings$vars))
 ) + labs(title = "Correlação cruzada das séries", x = "Lags", y = "Correlação")
 
-vars_sds <- data %>%
-  select(-date) %>%
-  map_dbl(~ sd(., na.rm = TRUE) * ifelse(trans == "log", 100, 1))
-
 # ADF tests:
-table_adf(data, start_vac, vars_names, type = "text")
+table_adf(data, n_vac, namings$vars, type = "text")
 
 
 # ---- Seasonality ----
-ts(format(data$date, "%U"))
-as_ts <- function(x, freq = 13, start = 8) ts(x, frequency = freq, start = start)
+ts(format(data$date, "%U")) #find the start point for
+as_ts <- function(x, freq, start = 8) ts(x, frequency = freq, start = start)
 
 # Season plots:
-walk(list(decompose, ggseasonplot, ggsubseriesplot), function(fun){
-  walk(select(data, -date), ~ as_ts(.x) %>% fun() %>% plot())
+iwalk(select(data, -date), function(var, name) {
+  graphs <- map(
+    list(\(x) autoplot(decompose(x)), ggseasonplot, ggsubseriesplot),
+    ~ as_ts(var, 13) %>% .x()
+  )
+  g <- wrap_plots(graphs) + plot_annotation(title = paste("Seasonality analisys for", name))
+  plot(g)
 })
 
 # Cycle averages:
@@ -129,204 +141,180 @@ walk(
 
 # Season tests
 walk(list(ocsb.test, uroot::hegy.test), function(fun){ #uroot::ch.test
-  walk(select(data, -date), ~ as_ts(.x) %>% fun() %>% print)
+  walk(select(data, -date), ~ as_ts(.x, 13) %>% fun() %>% print)
 })
 
 # Auto arima
 walk(select(data, -date), function(x) {
-  auto.arima(as_ts(x)) %>%
+  auto.arima(as_ts(x, 13)) %>%
     `[[`("arma") %>%
     set_names(c("AR", "MA", "SAR", "SMA", "P", "D", "SD")) %>%
     print()
 })
 
 
-# ---- Before and after analisys ----
+# ---- Before and after analysis ----
 data_ba <- list(
-  Before = data[1:(start_vac - 1), ],
-  After  = data[start_vac:n, ],
-  Afterp = data[(start_vac + gap_size):n, ]
+  Before = data[1:(n_vac - 1), ],
+  After  = data[n_vac:n, ],
+  Afterp = data[(n_vac + gap_size):n, ]
 )
 
 data_ba$Before <- select(data_ba$Before, !starts_with("vaccines"))
 
 # CCF B&A:
-names_ba <- c("Antes", "Depois", "Depois+")
-ccf_ba(data_ba, names_ba, lag.max = lag.max)
+ccf_ba(data_ba, namings$ba_expl, lag.max = lag.max)
 
 # Granger tests B&A:
 map(data_ba, ~ VARselect(select(.x, -date), lag.max = lag.max, exogen = create_exogen(.x, include, week))) %>%
   transpose() %>%
   pluck("selection") %>%
   bind_rows() %>%
-  mutate(Modelos = names_ba, .before = 1)
+  mutate(Modelos = namings$ba_expl, .before = 1)
 
 granger_ba(map(data_ba, ~ select(.x, -date)), p = 2, test = "Granger", type = "text")
 granger_ba(map(data_ba, ~ select(.x, -date)), p = 2, test = "Instant", type = "text")
 
 
 
-# Modeling (VAR) ----------------------------------------------------------
-VARselect(select(data[start_vac:n,], -date),
-  lag.max = lag.max,
-  exogen = create_exogen(data %>% slice(start_vac:n), include, week)
+# Modeling ----------------------------------------------------------------
+# ---- Lag selection ----
+mods_args <- list( #bf = before, af = after, afp = after + gap
+  bf_no = list(slice = 1:(n_vac - 1), remove_match = "date|vaccines"),
+  af_no = list(slice = n_vac:n, remove_match = "date|vaccines"),
+  af_vac = list(slice = n_vac:n, remove_match = "date"),
+  afp_no = list(slice = (n_vac + gap_size):n, remove_match = "date|vaccines"),
+  afp_vac = list(slice = (n_vac + gap_size):n, remove_match = "date")
 )
 
-p <- if (week) 2 else 16
+mod_select <- map(mods_args, function(args) {
+  inject(select_var(data, lag.max, include = include, !!!args, type = "both")) #season = 4
+})
 
-modav_var <- create_var(data, p, start_vac:n, "date", include)
+transpose(mod_select)$selection
+ggvar_select(mod_select)
 
-summary(modav_var)
+mods_args <- map2(mods_args, list(2, 2, 2, 3, 3), ~ c(.x, p = .y))
+
+
+# ---- VAR and SVAR ----
+mod_var <- map(mods_args, function(args) {
+  inject(create_var(data, include = include, !!!args, type = "both")) #season = 4
+})
+walk(mod_var, ~ print(summary(.x)))
+
+mod_svar <- map(mod_var, id.chol)
+walk(mod_svar, ~ print(.x$B))
 
 
 
-# Diagnostics (VAR) -------------------------------------------------------
+# Diagnostics -------------------------------------------------------------
+mod <- mod_var$bf_no #run this section model by model
+
 # Fitted and residual values:
-ggvar_fit(modav_var, index = data$date[-(1:(start_vac - 1))],
-  args_facet = list(scales = "free_y", ncol = 1, labeller = labeller(serie = vars_names)),
-) + labs(title = "VAR fit", linetype = "Variável") +
-  ggwaves
+ggvar_fit(mod, #index = data$date[-(1:(n_vac - 1))]
+  args_facet = list(scales = "free_y", ncol = 1, labeller = labeller(serie = namings$vars)),
+) + labs(title = "VAR fit", linetype = "Variável") #+ ggwaves(TRUE)
 
-ggvar_values(modav_var, index = data$date[-(1:(start_vac - 1 + p))],
-  args_facet = list(scales = "free_y", ncol = 1, labeller = labeller(serie = vars_names))
-) + labs(title = "VAR resíduos", y = "Resíduos") +
-  ggwaves
+ggvar_values(mod, #index = data$date[-(1:(n_vac - 1 + p))]
+  args_facet = list(scales = "free_y", ncol = 1, labeller = labeller(serie = namings$vars))
+) + labs(title = "VAR resíduos", y = "Resíduos") #+ ggwaves(TRUE)
 
-logLik(modav_var)
+logLik(mod)
 
 # Residual correlations
-ggvar_acf(modav_var, args_facet = list(labeller = labeller(serie = vars_names))) +
+ggvar_acf(mod, args_facet = list(labeller = labeller(serie = namings$vars))) +
   labs(title = "Auto-correlação dos resíduos",y = "Correlação")
-ggvar_acf(modav_var, type = "partial", args_facet = list(labeller = labeller(serie = vars_names))) +
+ggvar_acf(mod, type = "partial", args_facet = list(labeller = labeller(serie = namings$vars))) +
   labs(title = "Auto-correlação parcial dos resíduos",y = "Correlação")
-ggvar_ccf(modav_var, args_facet = list(labeller = labeller(serie = vars_names))) +
+ggvar_ccf(mod, args_facet = list(labeller = labeller(serie = namings$vars))) +
   labs(title = "Correlação cruzada dos resíduos",y = "Correlação")
 
-serial.test(modav_var)
-serial.test(modav_var, type = "ES")
-residuals(modav_var) %>% as_tibble() %>% map(tseries::adf.test)
+serial.test(mod)
+serial.test(mod, type = "ES")
+residuals(mod) %>% as_tibble() %>% map(tseries::adf.test)
 
 # Residual distribution and stability
-ggvar_dispersion(modav_var, args_facet = list(scales = "free", labeller = labeller(serie = vars_names))) +
+ggvar_dispersion(mod, args_facet = list(scales = "free", labeller = labeller(serie = namings$vars))) +
   labs(title = "VAR resíduos (dispersão)", x = "Fit", y = "Resíduos")
-arch.test(modav_var)
+arch.test(mod)
 
-ggvar_distribution(modav_var, args_facet = list(scales = "free", labeller = labeller(serie = vars_names))) +
+ggvar_distribution(mod, args_facet = list(scales = "free", labeller = labeller(serie = namings$vars))) +
   labs(title = "VAR resíduos (distribuição)", x = "Resíduos", y = "Densidade")
-normality.test(modav_var)
+normality.test(mod)
 
-ggvar_stability(modav_var) #????
+ggvar_stability(stability(mod, type = "OLS-CUSUM"))
 
 # General VAR statistics
-roots(modav_var) %>%
+roots(mod) %>%
   map_chr(~ paste0(round(., 4), " (", ifelse(.<1, "<1", ">=1"), ")")) %>%
   cat(sep = ",\t")
 
-summary(modav_var)$varresult %>%
+summary(mod)$varresult %>%
   map(~ list(`R squared` = .$r.squared, `F test` =.$fstatistic)) %>%
   transpose()
 
 
 
-# Modeling (SVAR) ---------------------------------------------------------
-modav_svar <- id.chol(modav_var)
-
-# Residual correlations:
-summary(modav_var)$corres %>% stargazer(summary = FALSE, rownames = FALSE, type = "text")
-modav_svar$B %>% `colnames<-`(rownames(.)) %>% stargazer(summary = FALSE, rownames = FALSE, type = "text")
-
-
-
 # Results: single model ---------------------------------------------------
-# ---- Impulse response functions ----
-modbv_svar_irf <- custom_svars_irf(modav_svar, n.ahead = n.ahead)
-plot(modbv_svar_irf)
-
-modbv_svar_irf$irf[,-1] <- modbv_svar_irf$irf[,-1] %>% map2_dfc(rep(vars_sds, 3), ~ .x/.y)
-plot(modbv_svar_irf)
-#my.ggsave("pictures/varIRF VCM.png", 16, 10)
-
-# ---- Forecast error variance decomposition ----
-modbv_svar_fevd <- custom_svars_fevd(modav_svar, n.ahead = n.ahead)
-plot(modbv_svar_fevd)
-#my.ggsave("varFEVD.png")
-
-
-
-include = "season"
-mod_var <- list(
-  modbn  = create_var(data, 1, 1:(start_vac - 1), "date|vaccines", include, type = "both"),
-  modan  = create_var(data, p, start_vac:n, "date|vaccines", include, type = "both"),
-  modav  = create_var(data, p, start_vac:n, "date", include, type = "both"),
-  modanp = create_var(data, p, (start_vac + gap_size):n, "date|vaccines", include, type = "both"),
-  modavp = create_var(data, p, (start_vac + gap_size):n, "date", include, type = "both")
-)
-# Results: before & after -------------------------------------------------
-VARselect(select(data[1:(start_vac - 1),], -matches("date|vaccines")),
-  lag.max = lag.max,
-  exogen = create_exogen(data %>% slice(1:(start_vac - 1)), include, week)
-)
-
-
-
-mod_svar <- map(mod_var, id.chol)
-
-# Correlations:
-map(mod_var, ~ summary(.x)$corres %>% round(3))
-walk(mod_svar, ~ .$B %>% `colnames<-`(rownames(.)) %>% stargazer(summary = FALSE, rownames = FALSE, type = "text"))
-
 # IRF's:
-mod_svar_irf <- map(mod_svar, ~ custom_svars_irf(.x, n.ahead = n.ahead))
+single_mod <- mod_svar$bf_no
+single_irfs <- custom_svars_irf(single_mod, n.ahead = n.ahead)
+plot(single_irfs)
 
-mod_sds <- list(vars_sds[-2], vars_sds[-2], vars_sds,vars_sds[-2], vars_sds)
-mod_svar_irf <- map2(mod_svar_irf, mod_sds, function(x, sds) {
-  x$irf[,-1] <- x$irf[,-1] %>% map2_dfc(rep(sds, sqrt(ncol(.))), ~ .x/.y)
-  x
+single_irfs$irf[,-1] <- single_irfs$irf[,-1] %>%
+  map2_dfc(rep(vars_sds[names(single_mod$VAR$varresult)], mod$K), ~ .x/.y)
+plot(single_irfs)
+
+# FEVD's:
+single_fevds <- custom_svars_fevd(single_mod, n.ahead = n.ahead)
+plot(single_fevds)
+
+
+
+# Results: before & after -------------------------------------------------
+# Correlations:
+walk2(mod_var, mod_svar, function(var, svar) {
+  B_var <- summary(var)$corres %>% round(3)
+  B_svar <- svar$B %>% `colnames<-`(rownames(.)) %>% round(3)
+  
+  cbind(`VAR:` = "", B_var, "|", `SVAR:` = "", B_svar) %>%
+    stargazer(summary = FALSE, rownames = FALSE, type = "text")
 })
 
-#plot(mod_svar_irf$modbn); plot(mod_svar_irf$modan); plot(mod_svar_irf$modav)
 
-data_irf <- map_dfc(mod_svar_irf, ~ .x$irf["epsilon[ cases_s ] %->% deaths_s"]) %>%
-  set_names(c("Antes", "Depois s/", "Depois c/", "Depois+ s/", "Depois+ c/"))
+# IRF's:
+ba_irfs <- map(mod_svar, ~ custom_svars_irf(.x, n.ahead = n.ahead))
 
-data_irf %>%
+ba_irfs <- map2(
+  ba_irfs,
+  list(vars_sds[-2], vars_sds[-2], vars_sds, vars_sds[-2], vars_sds),
+  function(x, sds) {
+    x$irf[,-1] <- x$irf[,-1] %>% map2_dfc(rep(sds, sqrt(ncol(.))), ~ .x/.y)
+    x
+})
+
+ba_irfs_deaths <- map_dfc(ba_irfs, ~ .x$irf["epsilon[ cases_s ] %->% deaths_s"]) %>%
+  set_names(namings$ba_mods)
+
+ba_irfs_deaths %>%
   mutate(Horizon = 1:n.ahead) %>%
   pivot_longer(-Horizon) %>%
+  mutate(name = factor(name, unique(name))) %>%
   ggplot(aes(Horizon, value)) +
   geom_line() +
   geom_hline(yintercept = 0) +
   facet_wrap(vars(name), nrow = 1)
 
-apply(data_irf[1:40,], 2, sum)
-apply(data_irf, 2, `[`, 1)
+apply(ba_irfs_deaths[1:n.ahead,], 2, sum) %>% round(4)
+
+
 
 # Results: counterfactual -------------------------------------------------
-mod_var$modbn
+#mod_var$modbn
+#
+#modpred <- mod_var$modavp
+#modpred$varresult$Vacinas$coefficients <- length(modpred$varresult$Vacinas$coefficients) %>% numeric()
+#modpred$datamat <- mutate(modpred$datamat, across(matches("Vacinas"), ~ 0))
 
-modpred <- mod_var$modavp
-modpred$varresult$Vacinas$coefficients <- length(modpred$varresult$Vacinas$coefficients) %>% numeric()
-modpred$datamat <- mutate(modpred$datamat, across(matches("Vacinas"), ~ 0))
 
-
-# Var select --------------------------------------------------------------
-lag.max = 8
-
-mod_select <- list(
-  modbn  = select_var(data, lag.max, 1:(start_vac - 1), "date|vaccines", include, type = "both", season = 4),
-  modan  = select_var(data, lag.max, start_vac:n, "date|vaccines", include, type = "both", season = 4),
-  modav  = select_var(data, lag.max, start_vac:n, "date", include, type = "both", season = 4),
-  modanp = select_var(data, lag.max, (start_vac + gap_size):n, "date|vaccines", include, type = "both", season = 4),
-  modavp = select_var(data, lag.max, (start_vac + gap_size):n, "date", include, type = "both", season = 4)
-)
-
-transpose(mod_select)$selection
-
-mod_select %>%
-  imap_dfr(function(sel, mod) {
-    crit <- as_tibble(apply(t(sel$criteria), 2, \(x) x/x[1]))
-    tibble(lag = 1:lag.max, mod = mod, select(crit, -`FPE(n)`))
-  }) %>%
-  pivot_longer(-c(lag, mod)) %>%
-  ggplot(aes(lag, value, color = name)) +
-  geom_line() +
-  facet_wrap(vars(mod), scales = "free_y")

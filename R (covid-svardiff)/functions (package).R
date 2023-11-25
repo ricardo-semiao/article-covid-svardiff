@@ -90,3 +90,18 @@ ggvar_irf2 <- function(data, ...) {
     facet_wrap(vars(model), ncol = 3, ...) +
     labs(title = "", y = "Resposta")
 }
+
+
+ggvar_select <- function(mod_select) {
+  mod_select %>%
+    imap_dfr(function(sel, mod) {
+      crit <- as_tibble(apply(t(sel$criteria), 2, \(x) x/x[1]))
+      tibble(lag = 1:lag.max, mod = mod, select(crit, -`FPE(n)`))
+    }) %>%
+    pivot_longer(-c(lag, mod)) %>%
+    mutate(mod = factor(mod, unique(mod))) %>%
+    ggplot(aes(lag, value, color = name)) +
+    geom_line() +
+    facet_wrap(vars(mod), scales = "free_y", labeller = labeller(mod = namings$ba_mods)) +
+    scale_x_continuous(breaks = scales::pretty_breaks())
+}

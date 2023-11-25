@@ -1,3 +1,25 @@
+### matrix B
+summary(modav_var)$corres %>% stargazer(summary = FALSE, rownames = FALSE, type = "text")
+modav_svar$B %>% `colnames<-`(rownames(.)) %>% stargazer(summary = FALSE, rownames = FALSE, type = "text")
+
+### model with ts data:
+data_ts <- ts(data, frequency = 53, start = 8)
+
+mod_var <- list(
+  modbn  = VAR(data_ts[1:(start_vac - 1),-c(1,3)], p = p, type = "both", season = 4,
+               exogen = create_exogen(data[1:(start_vac - 1),], include, week)),
+  modan  = VAR(data_ts[start_vac:n,-c(1,3)], p = p, type = "both", season = 4,
+               exogen = create_exogen(data[start_vac:n,], include, week)),
+  modav  = VAR(data_ts[start_vac:n,-c(1)], p = p, type = "both", season = 4,
+               exogen = create_exogen(data[start_vac:n,], include, week)),
+  modanp  = VAR(data_ts[(start_vac + gap_size):n,-c(1,3)], p = p, type = "both", season = 4,
+               exogen = create_exogen(data[(start_vac + gap_size):n,], include, week)),
+  modavp  = VAR(data_ts[(start_vac + gap_size):n,-c(1)], p = p, type = "both", season = 4,
+               exogen = create_exogen(data[(start_vac + gap_size):n,], include, week))
+)
+
+
+###
 data_detrend <- map2_df(
   select(data, -date),
   decompose(select(data, -date) %>% as_ts())$trend %>% as.data.frame(),
