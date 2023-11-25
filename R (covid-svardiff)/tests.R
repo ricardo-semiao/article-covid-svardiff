@@ -1,3 +1,6 @@
+create_exogen(data[1:(start_vac - 1),], include, week)
+create_exogen(data_ba$Before, include, week)
+
 #main_var <- create_var(data, p, start_vac:n, "date", "season|intramonth")
 #main_svar <- id.chol(main_var)
 #

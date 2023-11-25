@@ -34,8 +34,12 @@ na_approx <- function(data) {
 }
 
 
-create_exogen <- function(data, include = "none") {
+create_exogen <- function(data, include = "none", week) {
   exogen <- list()
+  breaks_waves <- as.Date(c(
+    start1 = "2021-02-21", end1 = "2021-06-22",
+    start2 = "2022-01-03", end2 = "2022-03-12"
+  ))
   
   if (include == "none") {
     return(NULL)
@@ -46,7 +50,8 @@ create_exogen <- function(data, include = "none") {
       transmute(
         season_high = format(date, "%m") %in% c("12", "01", "02"),
         season_mid = format(date, "%m") %in% c("10", "11", "03", "04")
-      )
+      ) %>%
+      mutate(across(everything(), as.numeric))
   }
   
   if (grepl("intramonth", include)) {
@@ -55,53 +60,123 @@ create_exogen <- function(data, include = "none") {
       set_names(c("week1", "week2", "week3"))
   }
   
+  if (grepl("waves", include)) {
+    x <- findInterval(data$date, breaks_waves)
+    l <- length(unique(x))
+    if (l > 1) {
+      exogen$waves <- x %>%
+        fastDummies::dummy_cols(remove_first_dummy = TRUE, remove_selected_columns = TRUE) %>%
+        set_names(paste0("wave", 2:l))
+    }
+  }
+  
+  if (week && grepl("intraweek", include)) {
+    x <- as.numeric(data$date %>% format("%w"))
+    exogen$weekdays <- ifelse(x %in% c(6, 0),
+      "weekend", ifelse(x %in% c(1, 2), "weekstart", "weekmid")
+    ) %>%
+      fastDummies::dummy_cols(remove_selected_columns = TRUE) %>%
+      select(-weekmid)
+  }
+  
   bind_cols(exogen)
 }
 
-create_var <- function(data, p, slice = 1:nrow(data), remove_match = "$^", include) {
+
+select_var <- function(data, lag.max, slice = 1:nrow(data), remove_match = "$^", include, ...) {
   data <- data %>% slice(slice)
-  exogen <- create_exogen(data, include)
+  exogen <- create_exogen(data, include, week)
   
   data %>%
     select(-matches(remove_match)) %>%
-    VAR(p = p, exogen = exogen)
+    VARselect(lag.max, exogen = exogen, ...)
 }
 
 
-#custom_svars_irf <- function(x, ..., n.ahead = 20) 
-#{
-#  if (!(is(x, "svars"))) {
-#    stop("\nPlease provide an object of class 'svars'.\n")
-#  }
-#  if (x$type == "const") {
-#    A_hat <- x$A_hat[, -1]
-#  }
-#  else if (x$type == "trend") {
-#    A_hat <- x$A_hat[, -1]
-#  }
-#  else if (x$type == "both") {
-#    A_hat <- x$A_hat[, -c(1, 2)]
-#  }
-#  else {
-#    A_hat <- x$A_hat
-#  }
-#  A_hat <- A_hat[, (ncol(A_hat) - x$K*x$p + 1):(ncol(A_hat))]
-#  B_hat <- x$B
-#  IR <- array(unlist(svars:::IRF(A_hat, B_hat, n.ahead)), c(x$K, x$K, 
-#                                                    n.ahead))
-#  impulse <- matrix(0, ncol = dim(IR)[2]^2 + 1, nrow = dim(IR)[3])
-#  colnames(impulse) <- rep("V1", ncol(impulse))
-#  cc <- 1
-#  impulse[, 1] <- seq(0, dim(IR)[3] - 1)
-#  for (i in 1:dim(IR)[2]) {
-#    for (j in 1:dim(IR)[2]) {
-#      cc <- cc + 1
-#      impulse[, cc] <- IR[i, j, ]
-#      colnames(impulse)[cc] <- paste("epsilon[", colnames(x$y)[j], 
-#                                     "]", "%->%", colnames(x$y)[i])
-#    }
-#  }
-#  impulse <- list(irf = as.data.frame(impulse))
-#  class(impulse) <- "svarirf"
-#  return(impulse)
-#}
+create_var <- function(data, p, slice = 1:nrow(data), remove_match = "$^", include, ...) {
+  data <- data %>% slice(slice)
+  exogen <- create_exogen(data, include, week)
+  
+  data %>%
+    select(-matches(remove_match)) %>%
+    VAR(p = p, exogen = exogen, ...)
+}
+
+
+custom_svars_irf <- function(x, ..., n.ahead = 20) 
+{
+  if (!(is(x, "svars"))) {
+    stop("\nPlease provide an object of class 'svars'.\n")
+  }
+  if (x$type == "const") {
+    A_hat <- x$A_hat[, -1]
+  }
+  else if (x$type == "trend") {
+    A_hat <- x$A_hat[, -1]
+  }
+  else if (x$type == "both") {
+    A_hat <- x$A_hat[, -c(1, 2)]
+  }
+  else {
+    A_hat <- x$A_hat
+  }
+  A_hat <- A_hat[, (ncol(A_hat) - x$K*x$p + 1):(ncol(A_hat))] #remove exogens
+  B_hat <- x$B
+  IR <- array(unlist(svars:::IRF(A_hat, B_hat, n.ahead)), c(x$K, x$K, 
+                                                    n.ahead))
+  impulse <- matrix(0, ncol = dim(IR)[2]^2 + 1, nrow = dim(IR)[3])
+  colnames(impulse) <- rep("V1", ncol(impulse))
+  cc <- 1
+  impulse[, 1] <- seq(0, dim(IR)[3] - 1)
+  for (i in 1:dim(IR)[2]) {
+    for (j in 1:dim(IR)[2]) {
+      cc <- cc + 1
+      impulse[, cc] <- IR[i, j, ]
+      colnames(impulse)[cc] <- paste("epsilon[", colnames(x$y)[j], 
+                                     "]", "%->%", colnames(x$y)[i])
+    }
+  }
+  impulse <- list(irf = as.data.frame(impulse))
+  class(impulse) <- "svarirf"
+  return(impulse)
+}
+
+
+custom_svars_fevd <- function (x, n.ahead = 10, ...) 
+{
+  if (!(is(x, "svars"))) {
+    stop("\nPlease provide an object of class 'svars'.\n")
+  }
+  if (x$type == "const") {
+    A_hat <- x$A_hat[, -1]
+  }
+  else if (x$type == "trend") {
+    A_hat <- x$A_hat[, -1]
+  }
+  else if (x$type == "both") {
+    A_hat <- x$A_hat[, -c(1, 2)]
+  }
+  else {
+    A_hat <- x$A_hat
+  }
+  A_hat <- A_hat[, (ncol(A_hat) - x$K*x$p + 1):(ncol(A_hat))] #remove exogens
+  B_hat <- x$B
+  IR <- array(unlist(svars:::IRF(A_hat, B_hat, n.ahead)), c(x$K, x$K, 
+                                                    n.ahead))
+  fe <- list()
+  for (i in 1:nrow(B_hat)) {
+    fe[[i]] <- as.data.frame(t(IR[i, , ]))
+    colnames(fe[[i]]) <- colnames(x$y)
+  }
+  names(fe) <- colnames(x$y)
+  fe2 <- fe
+  for (i in 1:length(fe)) {
+    for (j in 1:n.ahead) {
+      fe2[[i]][j, ] <- (colSums(fe[[i]][j:1, ]^2)/sum(fe[[i]][j:1, 
+      ]^2)) * 100
+    }
+  }
+  class(fe2) <- "svarfevd"
+  return(fe2)
+}
+

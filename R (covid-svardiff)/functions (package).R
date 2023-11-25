@@ -1,4 +1,5 @@
-table_adf <- function(data, start, vars_names, ...) {
+table_adf <- function(data, start, vars_names, title = "Teste Dickey-Fuller Aumentado",
+  table_names = c("Variáveis", "Estatística", "Lag", "P-valor"), ...) {
   result_adf <- data %>%
     filter(date >= start) %>%
     select(-date) %>%
@@ -10,10 +11,13 @@ table_adf <- function(data, start, vars_names, ...) {
     })
   
   result_adf %>%
-    set_names(c("Estatística", "Lag", "P-valor")) %>%
-    mutate(across(-Lag, ~ formatC(.x, digits = 2, format = "f"))) %>%
-    mutate(Variável = vars_names, .before = 1) %>%
-    stargazer(summary = FALSE, title = "Teste Dickey-Fuller Aumentado", label = "tb:testadf", ...)
+    mutate(
+      across(-parameter, ~ formatC(.x, digits = 2, format = "f")),
+      var = vars_names, .before = 1,
+      across(everything(), unname)
+    ) %>%
+    set_names(table_names) %>%
+    stargazer(summary = FALSE, title = title, label = "tb:testadf", ...)
 }
 
 
@@ -67,7 +71,7 @@ granger_ba = function(data, p, test, ...){
     mutate(
       Estatística = round(`Estatística`, 2),
       across(contains("GL"), round),
-      `P-valor` = paste(round(`P-valor`, 4), pvalue.ast(`P-valor`))
+      `P-valor` = paste0(round(`P-valor`, 4), pvalue.ast(`P-valor`))
     ) %>%
     mutate(Variável = c("Antes", "Depois", "Depois+"), .before = 1) %>%
     stargazer(
