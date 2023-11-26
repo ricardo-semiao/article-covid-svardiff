@@ -19,8 +19,12 @@ source("functions (package).R")
 week <- TRUE
 trans <- "level"
 include <- "season" #season|intramonth|waves|intraweek
+type <- "both"
 
-vars_order <- paste0(c("cases", "vaccines", "deaths"), "_", "s")
+vars_order <- paste0(
+  c("cases", "vaccines", "deaths"), "_",
+  c(level = "s", log = "l", prop = "p")[trans]
+)
 gap_size <- if (week) 4*2.5 else 30*2.5
 lag.max <- if (week) 4*2.5 else 30*2.5
 n.ahead <- if (week) 53*1.5 else 365*1.5
@@ -110,14 +114,17 @@ table_adf(data, n_vac, namings$vars, type = "text")
 
 
 # ---- Seasonality ----
-ts(format(data$date, "%U")) #find the start point for
-as_ts <- function(x, freq, start = 8) ts(x, frequency = freq, start = start)
+as_ts <- function(x,
+                  freq = if (week) 4 else 30, #experiment with different values
+                  start = format(data$date, if (week) "%U" else "%d")[1]) {
+  ts(x, frequency = freq, start = start)
+} 
 
 # Season plots:
 iwalk(select(data, -date), function(var, name) {
   graphs <- map(
     list(\(x) autoplot(decompose(x)), ggseasonplot, ggsubseriesplot),
-    ~ as_ts(var, 13) %>% .x()
+    ~ as_ts(var) %>% .x() + theme(legend.position = "none")
   )
   g <- wrap_plots(graphs) + plot_annotation(title = paste("Seasonality analisys for", name))
   plot(g)
@@ -141,12 +148,12 @@ walk(
 
 # Season tests
 walk(list(ocsb.test, uroot::hegy.test), function(fun){ #uroot::ch.test
-  walk(select(data, -date), ~ as_ts(.x, 13) %>% fun() %>% print)
+  walk(select(data, -date), ~ as_ts(.x) %>% fun() %>% print)
 })
 
 # Auto arima
 walk(select(data, -date), function(x) {
-  auto.arima(as_ts(x, 13)) %>%
+  auto.arima(as_ts(x)) %>%
     `[[`("arma") %>%
     set_names(c("AR", "MA", "SAR", "SMA", "P", "D", "SD")) %>%
     print()
@@ -188,18 +195,22 @@ mods_args <- list( #bf = before, af = after, afp = after + gap
 )
 
 mod_select <- map(mods_args, function(args) {
-  inject(select_var(data, lag.max, include = include, !!!args, type = "both")) #season = 4
+  inject(select_var(data, lag.max, include = include, !!!args, type = type)) #season = 4
 })
 
 transpose(mod_select)$selection
 ggvar_select(mod_select)
 
-mods_args <- map2(mods_args, list(2, 2, 2, 3, 3), ~ c(.x, p = .y))
+mods_args <- map2(
+  mods_args,
+  if (week) list(2, 3, 3, 4, 4) else c(2, 2, 2, 2, 2)
+  , ~ c(.x, p = .y)
+)
 
 
 # ---- VAR and SVAR ----
 mod_var <- map(mods_args, function(args) {
-  inject(create_var(data, include = include, !!!args, type = "both")) #season = 4
+  inject(create_var(data, include = include, !!!args, type = type)) #season = 4
 })
 walk(mod_var, ~ print(summary(.x)))
 
@@ -259,15 +270,17 @@ summary(mod)$varresult %>%
 # Results: single model ---------------------------------------------------
 # IRF's:
 single_mod <- mod_svar$bf_no
-single_irfs <- custom_svars_irf(single_mod, n.ahead = n.ahead)
-plot(single_irfs)
+single_irfs <- custom_svars_fun(irf, single_mod, n.ahead = n.ahead)
 
 single_irfs$irf[,-1] <- single_irfs$irf[,-1] %>%
   map2_dfc(rep(vars_sds[names(single_mod$VAR$varresult)], mod$K), ~ .x/.y)
-plot(single_irfs)
+
+#boot <- custom_svars_fun(wild.boot, single_mod, nboot = 1000)# %>% ba.boot()
+#plot(boot)
+
 
 # FEVD's:
-single_fevds <- custom_svars_fevd(single_mod, n.ahead = n.ahead)
+single_fevds <- custom_svars_fun(fevd, single_mod, n.ahead = n.ahead)
 plot(single_fevds)
 
 
@@ -284,7 +297,7 @@ walk2(mod_var, mod_svar, function(var, svar) {
 
 
 # IRF's:
-ba_irfs <- map(mod_svar, ~ custom_svars_irf(.x, n.ahead = n.ahead))
+ba_irfs <- map(mod_svar, ~ custom_svars_fun(irf, .x, n.ahead = n.ahead))
 
 ba_irfs <- map2(
   ba_irfs,
@@ -294,7 +307,7 @@ ba_irfs <- map2(
     x
 })
 
-ba_irfs_deaths <- map_dfc(ba_irfs, ~ .x$irf["epsilon[ cases_s ] %->% deaths_s"]) %>%
+ba_irfs_deaths <- map_dfc(ba_irfs, ~ .x$irf %>% .[grep(".+cases.+deaths.+", names(.))]) %>%
   set_names(namings$ba_mods)
 
 ba_irfs_deaths %>%
@@ -311,10 +324,37 @@ apply(ba_irfs_deaths[1:n.ahead,], 2, sum) %>% round(4)
 
 
 # Results: counterfactual -------------------------------------------------
-#mod_var$modbn
-#
-#modpred <- mod_var$modavp
-#modpred$varresult$Vacinas$coefficients <- length(modpred$varresult$Vacinas$coefficients) %>% numeric()
-#modpred$datamat <- mutate(modpred$datamat, across(matches("Vacinas"), ~ 0))
+cf_mods <- list()
 
+cf_mods$cf1a3 <- mod_var$bf_no
 
+cf_mods$cf2a4 <- mod_var$af_vac
+
+for (x in c("deaths", "cases")) {
+  coefs <- cf_mods$cf2a4$varresult[[name(x)]]$coefficients
+  coefs[grep("vaccines", names(coefs))] <- 0
+  cf_mods$cf2a4$varresult[[name(x)]]$coefficients <- coefs
+}
+
+#cf_mods$cf2a4$varresult[[name("vaccines")]]$coefficients <-
+#  cf_mods$cf2a4$varresult[[name("vaccines")]]$coefficients %>%
+#  length() %>%
+#  numeric()
+#cf_mods$cf2a4$datamat <- cf_mods$cf2a4$datamat %>% mutate(across(matches("vaccines"), ~ 0))
+
+cf_preds <- list(
+  cf1 = create_cf_1(cf_mods$cf1a3),
+  cf2 = create_cf_1(cf_mods$cf2a4),
+  cf3 = create_cf_2(cf_mods$cf1a3),
+  cf4 = create_cf_2(cf_mods$cf2a4)
+)
+
+walk(cf_preds,
+  ~ ggvar_predict(.x, data[n_vac:n,], args_facet = list(scales = "free_y")) %>% plot()
+)
+
+map(cf_preds, function(pred) {
+  pred$fcst[[grep("deaths", vars_order, value = TRUE)]][,-4] %>%
+    as.data.frame() %>%
+  sapply(\(x)  {sum(x - data[[grep("deaths", vars_order, value = TRUE)]][n_vac:n])})
+})
