@@ -1,3 +1,34 @@
+c(lin = "green", sqr = "red", const = "blue")[name]
+
+x <- findInterval(data$date, breaks_waves)
+    x <- ifelse(x %in% c(1, 3, 5, 7, 9), x, 0)
+    inds <- lapply(setdiff(unique(x), 0), \(u) x == u)
+    l <- length(inds)
+    
+    if (grepl("1", include)) {
+      exogen$waves <- x %>%
+        fastDummies::dummy_cols(remove_selected_columns = TRUE) %>%
+        set_names(paste0("wave", 0:(l - 1))) %>%
+        select(-wave0)
+    } else if (grepl("2", include)) {
+      mat <- matrix(0, length(x), l*2)
+      for (i in seq_along(inds)) {
+        mat[inds[[i]], i] <- 1:sum(inds[[i]])
+        mat[inds[[i]], i + 1] <- mat[inds[[i]], i]^2
+      }
+      exogen$waves <- mat %>%
+        as.data.frame() %>%
+        set_names(paste0("wave", rep(1:l, each = 2), rep(c("",".sqr"), l)))
+    }
+  }
+
+
+#cf_mods$cf2a4$varresult[[name("vaccines")]]$coefficients <-
+#  cf_mods$cf2a4$varresult[[name("vaccines")]]$coefficients %>%
+#  length() %>%
+#  numeric()
+#cf_mods$cf2a4$datamat <- cf_mods$cf2a4$datamat %>% mutate(across(matches("vaccines"), ~ 0))
+
 a = custom_svars_fun(cf, x = mod_svar$af_vac, series = 3)
 plot(a)
 sum(a$counter[,2] - data$deaths_l[(n_vac + mod_svar$af_vac$p):n])

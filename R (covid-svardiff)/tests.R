@@ -1,4 +1,4 @@
-name("death", data)
+create_cf_1(cf_mods$cf1a3, ci = 0.8)
 
 SVAR2 <- function (x, estmethod = c("scoring", "direct"), Amat = NULL, 
                    Bmat = NULL, start = NULL, max.iter = 100, conv.crit = 1e-07, 
