@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.10.12) (preloaded format=pdflatex 2023.11.16)  30 NOV 2023 23:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.10.12) (preloaded format=pdflatex 2023.11.16)  1 DEC 2023 13:40
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1266,7 +1266,7 @@ Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'brazil'.
-LaTeX Font Info:    Trying to load font information for T1+ptm on input line 90.
+LaTeX Font Info:    Trying to load font information for T1+ptm on input line 91.
 (C:\Users\ricar\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
@@ -1274,28 +1274,41 @@ File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 LaTeX Warning: Unused global option(s):
     [hyperref].
 
-(main.aux)
+(main.aux
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 90.
-LaTeX Font Info:    ... okay on input line 90.
-Package hyperref Info: Link coloring ON on input line 90.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 91.
+LaTeX Font Info:    ... okay on input line 91.
+Package hyperref Info: Link coloring ON on input line 91.
 \myptabbox=\box122
 \myptabboxwidth=\skip286
 
@@ -1408,9 +1421,9 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
  (main.bbl)
-Package biblatex Info: Reference section=0 on input line 90.
-Package biblatex Info: Reference segment=0 on input line 90.
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 100.
+Package biblatex Info: Reference section=0 on input line 91.
+Package biblatex Info: Reference segment=0 on input line 91.
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 101.
  (C:\Users\ricar\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1phv.fd
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 )
@@ -1426,11 +1439,11 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
 [1
 
 {C:/Users/ricar/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 104.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 105.
  (C:\Users\ricar\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 104.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 105.
  (C:\Users\ricar\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
@@ -1447,28 +1460,28 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.104 
+l.105 
        [1
 
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 134--134
+Underfull \hbox (badness 10000) in paragraph at lines 135--135
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 134--134
+Underfull \hbox (badness 10000) in paragraph at lines 135--135
 
  []
 
 
-Overfull \hbox (16.54776pt too wide) in paragraph at lines 134--134
+Overfull \hbox (16.54776pt too wide) in paragraph at lines 135--135
 []  [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 134--134
+Underfull \hbox (badness 10000) in paragraph at lines 135--135
 
  []
 
@@ -1576,7 +1589,12 @@ Overfull \hbox (2.37578pt too wide) detected at line 27
 
 
 Overfull \hbox (2.37578pt too wide) detected at line 28
-    \T1/phv/b/n/12 30
+    \T1/phv/b/n/12 32
+ []
+
+
+Overfull \hbox (2.37578pt too wide) detected at line 29
+    \T1/phv/b/n/12 33
  []
 
 )
@@ -1602,7 +1620,7 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
 [9
 
 ]
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 269.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 270.
  (C:\Users\ricar\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
@@ -1636,7 +1654,7 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
  []
 
 [12]
-Overfull \hbox (3.37764pt too wide) in paragraph at lines 380--381
+Overfull \hbox (3.37764pt too wide) in paragraph at lines 381--382
  [][] 
  []
 
@@ -1654,7 +1672,7 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.391 
+l.392 
       ]
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
    []
@@ -1696,15 +1714,15 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
  []
 
 [17]
-<Figuras/stat_historic.png, id=189, 648.5028pt x 298.716pt>
+<Figuras/stat_historic.png, id=191, 648.5028pt x 298.716pt>
 File: Figuras/stat_historic.png Graphic file (type png)
 <use Figuras/stat_historic.png>
-Package pdftex.def Info: Figuras/stat_historic.png  used on input line 471.
+Package pdftex.def Info: Figuras/stat_historic.png  used on input line 472.
 (pdftex.def)             Requested size: 432.48051pt x 199.20883pt.
-<Figuras/stat_acf.png, id=191, 864.831pt x 497.6994pt>
+<Figuras/stat_acf.png, id=193, 864.831pt x 497.6994pt>
 File: Figuras/stat_acf.png Graphic file (type png)
 <use Figuras/stat_acf.png>
-Package pdftex.def Info: Figuras/stat_acf.png  used on input line 480.
+Package pdftex.def Info: Figuras/stat_acf.png  used on input line 481.
 (pdftex.def)             Requested size: 432.48051pt x 248.88705pt.
 
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
@@ -1720,17 +1738,17 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.485 
+l.486 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.485 
+l.486 
        <./Figuras/stat_historic.png> <./Figuras/stat_acf.png>]
-<Figuras/stat_ba.png, id=199, 864.831pt x 298.716pt>
+<Figuras/stat_ba.png, id=201, 864.831pt x 298.716pt>
 File: Figuras/stat_ba.png Graphic file (type png)
 <use Figuras/stat_ba.png>
-Package pdftex.def Info: Figuras/stat_ba.png  used on input line 489.
+Package pdftex.def Info: Figuras/stat_ba.png  used on input line 490.
 (pdftex.def)             Requested size: 432.48051pt x 149.38042pt.
 
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
@@ -1746,7 +1764,7 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.522 \end{align}
+l.523 \end{align}
                   <./Figuras/stat_ba.png>]
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
    []
@@ -1758,10 +1776,10 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
  []
 
 [20]
-<Figuras/res1_irfs.png, id=243, 864.831pt x 298.716pt>
+<Figuras/res1_irfs.png, id=246, 864.831pt x 298.716pt>
 File: Figuras/res1_irfs.png Graphic file (type png)
 <use Figuras/res1_irfs.png>
-Package pdftex.def Info: Figuras/res1_irfs.png  used on input line 561.
+Package pdftex.def Info: Figuras/res1_irfs.png  used on input line 562.
 (pdftex.def)             Requested size: 432.48051pt x 149.38042pt.
 
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
@@ -1777,8 +1795,8 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6.5}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.567 S
-       ó o pico não passa toda a mudança de dinâmica, a vacinação pode... <./Figuras/res1_irfs.png>]
+l.567 
+       <./Figuras/res1_irfs.png>]
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
    []
  []
@@ -1792,12 +1810,12 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
 pdfTeX warning (ext4): destination with the same identifier (name{table.6.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.599 
+l.600 
       ]
-<Figuras/res2_cf1-2.png, id=275, 864.831pt x 398.2077pt>
+<Figuras/res2_cf1-2.png, id=278, 864.831pt x 398.2077pt>
 File: Figuras/res2_cf1-2.png Graphic file (type png)
 <use Figuras/res2_cf1-2.png>
-Package pdftex.def Info: Figuras/res2_cf1-2.png  used on input line 622.
+Package pdftex.def Info: Figuras/res2_cf1-2.png  used on input line 623.
 (pdftex.def)             Requested size: 432.48051pt x 199.13374pt.
 
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
@@ -1810,15 +1828,15 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
  []
 
 [23]
-<Figuras/res2_cf4-5.png, id=284, 864.831pt x 398.2077pt>
+<Figuras/res2_cf4-5.png, id=287, 864.831pt x 398.2077pt>
 File: Figuras/res2_cf4-5.png Graphic file (type png)
 <use Figuras/res2_cf4-5.png>
-Package pdftex.def Info: Figuras/res2_cf4-5.png  used on input line 631.
+Package pdftex.def Info: Figuras/res2_cf4-5.png  used on input line 632.
 (pdftex.def)             Requested size: 432.48051pt x 199.13374pt.
-<Figuras/res2_cf3-6.png, id=288, 864.831pt x 398.2077pt>
+<Figuras/res2_cf3-6.png, id=291, 864.831pt x 398.2077pt>
 File: Figuras/res2_cf3-6.png Graphic file (type png)
 <use Figuras/res2_cf3-6.png>
-Package pdftex.def Info: Figuras/res2_cf3-6.png  used on input line 640.
+Package pdftex.def Info: Figuras/res2_cf3-6.png  used on input line 641.
 (pdftex.def)             Requested size: 432.48051pt x 199.13374pt.
 
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
@@ -1834,12 +1852,12 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6.6}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.643 
+l.644 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6.7}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.643 
+l.644 
        <./Figuras/res2_cf1-2.png> <./Figuras/res2_cf4-5.png>]
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
    []
@@ -1854,12 +1872,12 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6.8}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.672 
+l.673 
       
 pdfTeX warning (ext4): destination with the same identifier (name{table.6.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.672 
+l.673 
        <./Figuras/res2_cf3-6.png>]
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
    []
@@ -1891,15 +1909,10 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
  []
 
 [28]
-<Figuras/ap_irfs.png, id=334, 648.5028pt x 373.395pt>
-File: Figuras/ap_irfs.png Graphic file (type png)
-<use Figuras/ap_irfs.png>
-Package pdftex.def Info: Figuras/ap_irfs.png  used on input line 701.
-(pdftex.def)             Requested size: 432.48051pt x 249.01105pt.
-<Figuras/ap_fevd.png, id=336, 648.5028pt x 373.395pt>
-File: Figuras/ap_fevd.png Graphic file (type png)
-<use Figuras/ap_fevd.png>
-Package pdftex.def Info: Figuras/ap_fevd.png  used on input line 710.
+<Figuras/diag_fit-res.png, id=339, 648.5028pt x 373.395pt>
+File: Figuras/diag_fit-res.png Graphic file (type png)
+<use Figuras/diag_fit-res.png>
+Package pdftex.def Info: Figuras/diag_fit-res.png  used on input line 721.
 (pdftex.def)             Requested size: 432.48051pt x 249.01105pt.
 
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
@@ -1912,15 +1925,25 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
  []
 
 [29
+pdfTeX warning (ext4): destination with the same identifier (name{table.A.3}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.726 
+      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.A.9}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.713 
-       <./Figuras/ap_irfs.png>]
-<Figuras/diag_fit-res.png, id=346, 864.831pt x 497.6994pt>
-File: Figuras/diag_fit-res.png Graphic file (type png)
-<use Figuras/diag_fit-res.png>
-Package pdftex.def Info: Figuras/diag_fit-res.png  used on input line 739.
+l.726 
+       <./Figuras/diag_fit-res.png>]
+<Figuras/diag_disp-dist.png, id=348, 864.831pt x 398.2077pt>
+File: Figuras/diag_disp-dist.png Graphic file (type png)
+<use Figuras/diag_disp-dist.png>
+Package pdftex.def Info: Figuras/diag_disp-dist.png  used on input line 730.
+(pdftex.def)             Requested size: 432.48051pt x 199.13374pt.
+<Figuras/diag_acf.png, id=350, 864.831pt x 497.6994pt>
+File: Figuras/diag_acf.png Graphic file (type png)
+<use Figuras/diag_acf.png>
+Package pdftex.def Info: Figuras/diag_acf.png  used on input line 739.
 (pdftex.def)             Requested size: 432.48051pt x 248.88705pt.
 
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
@@ -1936,48 +1959,17 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
 pdfTeX warning (ext4): destination with the same identifier (name{figure.A.10}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.742 
+l.744 
       
-pdfTeX warning (ext4): destination with the same identifier (name{table.B.3}) has been already used, duplicate ignored
+pdfTeX warning (ext4): destination with the same identifier (name{figure.A.11}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.742 
-       <./Figuras/ap_fevd.png>]
-<Figuras/diag_disp-dist.png, id=355, 864.831pt x 398.2077pt>
-File: Figuras/diag_disp-dist.png Graphic file (type png)
-<use Figuras/diag_disp-dist.png>
-Package pdftex.def Info: Figuras/diag_disp-dist.png  used on input line 748.
-(pdftex.def)             Requested size: 432.48051pt x 199.13374pt.
-
-Overfull \hbox (6.84009pt too wide) has occurred while \output is active
-   []
- []
-
-
-Overfull \hbox (6.84009pt too wide) has occurred while \output is active
-   []
- []
-
-[31
-pdfTeX warning (ext4): destination with the same identifier (name{figure.B.11}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.753 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{figure.B.12}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.753 
-       <./Figuras/diag_fit-res.png> <./Figuras/diag_disp-dist.png>]
-<Figuras/diag_acf.png, id=363, 864.831pt x 497.6994pt>
-File: Figuras/diag_acf.png Graphic file (type png)
-<use Figuras/diag_acf.png>
-Package pdftex.def Info: Figuras/diag_acf.png  used on input line 757.
-(pdftex.def)             Requested size: 432.48051pt x 248.88705pt.
-<Figuras/diag_stab.png, id=365, 864.831pt x 298.716pt>
+l.744 
+       <./Figuras/diag_disp-dist.png> <./Figuras/diag_acf.png>]
+<Figuras/diag_stab.png, id=358, 864.831pt x 298.716pt>
 File: Figuras/diag_stab.png Graphic file (type png)
 <use Figuras/diag_stab.png>
-Package pdftex.def Info: Figuras/diag_stab.png  used on input line 766.
+Package pdftex.def Info: Figuras/diag_stab.png  used on input line 748.
 (pdftex.def)             Requested size: 432.48051pt x 149.38042pt.
 
 Overfull \hbox (6.84009pt too wide) has occurred while \output is active
@@ -1989,17 +1981,53 @@ Overfull \hbox (6.84009pt too wide) has occurred while \output is active
    []
  []
 
-[32
-pdfTeX warning (ext4): destination with the same identifier (name{figure.B.13}) has been already used, duplicate ignored
+[31
+pdfTeX warning (ext4): destination with the same identifier (name{figure.A.12}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.772 \newpage
-              
-pdfTeX warning (ext4): destination with the same identifier (name{figure.B.14}) has been already used, duplicate ignored
+l.755 \newpage
+               <./Figuras/diag_stab.png>]
+Overfull \hbox (6.84009pt too wide) has occurred while \output is active
+   []
+ []
+
+
+Overfull \hbox (6.84009pt too wide) has occurred while \output is active
+   []
+ []
+
+[32]
+<Figuras/ap_irfs.png, id=371, 648.5028pt x 373.395pt>
+File: Figuras/ap_irfs.png Graphic file (type png)
+<use Figuras/ap_irfs.png>
+Package pdftex.def Info: Figuras/ap_irfs.png  used on input line 842.
+(pdftex.def)             Requested size: 432.48051pt x 249.01105pt.
+<Figuras/ap_fevd.png, id=373, 648.5028pt x 149.358pt>
+File: Figuras/ap_fevd.png Graphic file (type png)
+<use Figuras/ap_fevd.png>
+Package pdftex.def Info: Figuras/ap_fevd.png  used on input line 851.
+(pdftex.def)             Requested size: 432.48051pt x 99.6044pt.
+
+Overfull \hbox (6.84009pt too wide) has occurred while \output is active
+   []
+ []
+
+
+Overfull \hbox (6.84009pt too wide) has occurred while \output is active
+   []
+ []
+
+[33
+pdfTeX warning (ext4): destination with the same identifier (name{figure.C.13}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.772 \newpage
-               <./Figuras/diag_acf.png> <./Figuras/diag_stab.png>]
+l.855 \newpage
+               %página extra para resolver bug de remoção dá última pá...
+pdfTeX warning (ext4): destination with the same identifier (name{figure.C.14}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.855 \newpage
+               %página extra para resolver bug de remoção dá última pá... <./Figuras/ap_irfs.png> <./Figuras/ap_fevd.png>]
 \tf@toc=\write7
 \openout7 = `main.toc'.
 
@@ -2008,22 +2036,26 @@ l.772 \newpage
 LaTeX2e <2023-11-01>
 L3 programming layer <2020/03/25>
  ***********
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 37931 strings out of 474591
- 709612 string characters out of 5745777
+ 37936 strings out of 474591
+ 709648 string characters out of 5745777
  1947533 words of memory out of 5000000
- 59397 multiletter control sequences out of 15000+600000
+ 59400 multiletter control sequences out of 15000+600000
  632024 words of font info for 132 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,16n,107p,1358b,4986s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/ricar/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (33 pages, 3318666 bytes).
+Output written on main.pdf (34 pages, 3172836 bytes).
 PDF statistics:
- 547 PDF objects out of 1000 (max. 8388607)
- 120 named destinations out of 1000 (max. 500000)
- 286 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 560 PDF objects out of 1000 (max. 8388607)
+ 122 named destinations out of 1000 (max. 500000)
+ 294 words of extra memory for PDF output out of 10000 (max. 10000000)
 

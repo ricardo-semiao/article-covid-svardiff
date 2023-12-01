@@ -19,6 +19,7 @@
 \setlength{\parskip}{\baselineskip} % espaço vertical pós parágrafo
 \usepackage[bottom]{footmisc} % fixar footnote na parte de baixo da página
 
+% definir contagem do TOC
 \usepackage{chngcntr}
 \counterwithin{section}{chapter}
 \AtBeginDocument{\addtocontents{toc}{\changetocdepth{1}}}
@@ -548,7 +549,7 @@ Todo o trabalho computacional foi realizado utilizando o \textit{software} R com
 
 A seção \ref{sec:res1} calcula as IRF's dos cinco modelos VAR, utilizando os modelos SVAR, mostrando como a inclusão de vacinas afeta as funções. A seção \ref{sec:res2} constrói contrafactuais da não existência de vacinas com vários métodos diferentes, utilizando os modelos VAR, obtendo estimativas do efeito total da política de vacinação. O apdêndice \ref{ap:single} mostra a análise não prioritária das IRF's do modelo (SVAR) \eqref{eq:var5}.
 
-Antes de apresentar os resultados principais, vale a pena mostrar como correlação entre $\hat{\varepsilon}^i_{Casos}$ e $\hat{\varepsilon}^i_{Mortes}$\footnote{$\hat{\varepsilon}^i$ indica vetor de resíduos do modelo (i).} diminuiu após o início da vacinação. Nos três modelos VAR, respectivamente: $\mathbb{COR}(\hat{\varepsilon}^i_{Mortes}, \hat{\varepsilon}^i_{Casos}) = 0,91$, $0,46$, $0,48$, $0,30$, e $0,30$. Esse fato é uma evidência preliminar sobre como a vacina alterou a relação entre os choques das variáveis.
+Antes de apresentar os resultados principais, vale a pena mostrar como correlação entre $\hat{\varepsilon}^i_{Casos}$ e $\hat{\varepsilon}^i_{Mortes}$\footnote{$\hat{\varepsilon}^i$ indica vetor de resíduos do modelo (i).} diminuiu após o início da vacinação. Nos três modelos VAR, respectivamente: $\mathbb{COR}(\hat{\varepsilon}^i_{Mortes}, \hat{\varepsilon}^i_{Casos}) = 0,91$, $0,46$, $0,48$, $0,30$, e $0,30$. Esse fato é uma evidência preliminar sobre como a vacina alterou a relação entre os choques das variáveis. A comparação completa das correlações e das matrizes contemporâneas dos SVAR'res pode ser vista no apêndice \ref{ap:corres}.
 
 
 \section{Resposta de Mortes à Casos Pré e Pós Vacinação}\label{sec:res1}
@@ -691,27 +692,8 @@ O potencial da metodologia não foi explorado até o fim, existe espaço para a 
 \newpage
 \begin{apendicesenv}
 
-\chapter{IRF's Individuais}\label{ap:single}
-
-Como foi explicado, a identificação dos choques não é muito robusta, e existem variáveis omitidas no modelo, de modo que a análise das IRF's individualmente não é prioritária. De qualquer forma, pode-se vê-las na figura \ref{fig:apirf}. De fato, contra o que as análises mais robustas indicam, o efeito da vacina em casos e mortes não se mostra negativo.
-
-\begin{figure}[H]
-    \centering
-    \caption{IRF's do modelo (5)}
-    \includegraphics[width = 0.95\textwidth]{Figuras/ap_irfs.png}
-    \label{fig:apirf}
- \end{figure}
-
- Outro possível objeto de interesse são as \textit{Forecast Error Variance Decomposition} (FEVD), que indicam a fração da contribuição de cada variável para a variância da previsão de cada equação. A figura \ref{fig:apfevd}As vacinas parecem explicar uma maior porcentagem da variância nas mortes do que dos casos, embora não seja o \textit{driver} majoritário em nenhum dos dois.
-
- \begin{figure}[H]
-    \centering
-    \caption{FEVD's do modelo (5)}
-    \includegraphics[width = 0.95\textwidth]{Figuras/ap_fevd.png}
-    \label{fig:apfevd}
- \end{figure}
-
-
+\setlength{\afterchapskip}{0.25\baselineskip}
+\setlength{\beforechapskip}{0\baselineskip}
 
 \chapter{Diagnósticos do VAR}\label{ap:diag}
 Antes de sua inclusão no VAR \eqref{eq:var5}, foi realizado um teste de raiz unitária sobre as séries, apresentado na tabela \ref{tb:testadf}. Podemos ver que apenas a variável de casos é estacionária. Uma boa especificação do modelo pareceu lidar bem com essa limitação.
@@ -731,7 +713,7 @@ Mortes & -2.71 & 5 & 0.28 \\
 \end{tabular} 
 \end{table} 
 
-A comparação do fit do modelo VAR e os valores reais, bem como o resíduo resultante, está presente na figura \ref{fig:varfit}. A distribuição dos resíduos parece relativamente ter uma volatilidade similar ao longo da reta de valores fitados, e de fato, o teste ARCH-LM não indicou a presença de erros ARCH no modelo -- estatística do teste de $206,61$, com $180$ graus de liberdade, gerando um p-valor $< 0,0848$. O R quadrado de cada equação é: Casos $0,960$, Vacinas $0,918$, Mortes $0,988$
+A figura \ref{fig:varfit} apresenta o fit e os resíduos do modelo. A distribuição dos resíduos parece relativamente ter uma volatilidade similar ao longo da reta de valores fitados, e de fato, o teste ARCH-LM não indicou a presença de erros ARCH no modelo -- estatística do teste de $206,61$, com $180$ graus de liberdade, gerando um p-valor $< 0,0848$. O R quadrado de cada equação é: Casos $0,960$, Vacinas $0,918$, Mortes $0,988$
 
 \begin{figure}[H]
     \centering
@@ -769,7 +751,109 @@ A figura \ref{fig:varstab} mostra a estabilidade dos resíduos do modelo, mais e
 
 Vale atentar que as raízes do VAR são todas menores que 1: $0,909 (<1)$,	$0,886 (<1)$,	$0,886 (<1)$,	$0,754 (<1)$,	$0,754 (<1)$,	$0,563 (<1)$,	$0,563 (<1)$,	$0,522 (<1)$,	$0,522 (<1)$.
 
+
 \newpage
+\chapter{Correlação dos Choques}\label{ap:corres}
+
+As tabelas abaixo apresentam a matriz de correlação dos resíduos do VAR, e ao lado, a matriz de identificação do SVAR (com valores normalizados fora do parênteses), para os modelos \eqref{eq:var1} a \eqref{eq:var5}, respectivamente. Vale notar como a correlação de casos e mortes foi menor nos modelos finais.
+
+\begin{table}[!htbp] \centering 
+    %\caption{} 
+    \label{} 
+  \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
+  \\[-1.8ex]\hline 
+  \hline \\[-1.8ex] 
+  Casos & Mortes &  & Casos.1 & Mortes.1 \\ 
+  \hline \\[-1.8ex] 
+  1 & 0.915 & \textbar  & 1 (53786) & 0 (0) \\ 
+  0.915 & 1 & \textbar  & 2.273 (847) & 1 (372) \\ 
+  \hline \\[-1.8ex] 
+  \end{tabular} 
+\end{table} 
+  
+\begin{table}[!htbp] \centering 
+    %\caption{} 
+    \label{} 
+  \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
+  \\[-1.8ex]\hline 
+  \hline \\[-1.8ex] 
+  Casos & Mortes &  & Casos.1 & Mortes.1 \\ 
+  \hline \\[-1.8ex] 
+  1 & 0.467 & \textbar  & 1 (47365) & 0 (0) \\ 
+  0.467 & 1 & \textbar  & 0.527 (302) & 1 (572) \\ 
+  \hline \\[-1.8ex] 
+  \end{tabular} 
+\end{table} 
+  
+\begin{table}[!htbp] \centering 
+    %\caption{} 
+    \label{} 
+  \begin{tabular}{@{\extracolsep{5pt}} ccccccc} 
+  \\[-1.8ex]\hline 
+  \hline \\[-1.8ex] 
+  Casos & Vacinas & Mortes &  & Casos.1 & Vacinas.1 & Mortes.1 \\ 
+  \hline \\[-1.8ex] 
+  1 & 0.209 & 0.489 & \textbar  & 1 (46188) & 0 (0) & 0 (0) \\ 
+  0.209 & 1 & 0.314 & \textbar  & 0.214 (223224) & 1 (1041889) & 0 (0) \\ 
+  0.489 & 0.314 & 1 & \textbar  & 0.579 (317) & 0.256 (140) & 1 (547) \\ 
+  \hline \\[-1.8ex] 
+  \end{tabular} 
+\end{table} 
+  
+\begin{table}[!htbp] \centering 
+    %\caption{} 
+    \label{} 
+  \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
+  \\[-1.8ex]\hline 
+  \hline \\[-1.8ex] 
+  Casos & Mortes &  & Casos.1 & Mortes.1 \\ 
+  \hline \\[-1.8ex] 
+  1 & 0.308 & \textbar  & 1 (43597) & 0 (0) \\ 
+  0.308 & 1 & \textbar  & 0.324 (134) & 1 (412) \\ 
+  \hline \\[-1.8ex] 
+  \end{tabular} 
+\end{table} 
+  
+\begin{table}[!htbp] \centering 
+    %\caption{} 
+    \label{} 
+  \begin{tabular}{@{\extracolsep{5pt}} ccccccc} 
+  \\[-1.8ex]\hline 
+  \hline \\[-1.8ex] 
+  Casos & Vacinas & Mortes &  & Casos.1 & Vacinas.1 & Mortes.1 \\ 
+  \hline \\[-1.8ex] 
+  1 & 0.169 & 0.306 & \textbar  & 1 (41258) & 0 (0) & 0 (0) \\ 
+  0.169 & 1 & 0.355 & \textbar  & 0.171 (187884) & 1 (1097746) & 0 (0) \\ 
+  0.306 & 0.355 & 1 & \textbar  & 0.34 (134) & 0.342 (134) & 1 (393) \\ 
+  \hline \\[-1.8ex] 
+  \end{tabular} 
+\end{table} 
+
+
+
+\newpage
+\chapter{IRF's Individuais}\label{ap:single}
+
+Como foi explicado, a identificação dos choques não é muito robusta, e existem variáveis omitidas no modelo, de modo que a análise das IRF's individualmente não é prioritária. De qualquer forma, pode-se vê-las na figura \ref{fig:apirf}. De fato, contra o que as análises mais robustas indicam, o efeito da vacina em casos e mortes não se mostra negativo.
+
+\begin{figure}[H]
+    \centering
+    \caption{IRF's do modelo (5)}
+    \includegraphics[width = 0.95\textwidth]{Figuras/ap_irfs.png}
+    \label{fig:apirf}
+\end{figure}
+
+Outro possível objeto de interesse são as \textit{Forecast Error Variance Decomposition} (FEVD), que indicam a fração da contribuição de cada variável para a variância da previsão de cada equação. A figura \ref{fig:apfevd}. As vacinas parecem explicar uma maior porcentagem da variância nas mortes do que dos casos, embora não seja o \textit{driver} majoritário em nenhum dos dois.
+
+\begin{figure}[H]
+    \centering
+    \caption{FEVD's do modelo (5)}
+    \includegraphics[width = 0.95\textwidth]{Figuras/ap_fevd.png}
+    \label{fig:apfevd}
+\end{figure}
+
+\newpage %página extra para resolver bug de remoção dá última página
+
 
 \end{apendicesenv}
 

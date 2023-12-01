@@ -1,3 +1,13 @@
+ggvar_irf2 <- function(data, ...) {
+  ggplot(data, aes(horizon, irf, ymin = Lower, ymax = Upper)) +
+    geom_line() +
+    geom_ribbon(fill = NA, color = "blue", linetype = 2) +
+    geom_hline(yintercept = 0) +
+    facet_wrap(vars(model), ncol = 3, ...) +
+    labs(title = "", y = "Resposta")
+}
+
+
 ###### cf irfs plots
 sum(data$cases_s[n_vac:n] * (ba_sums[1] - ba_sums[5]) / 1000)
 sum(cf_preds$cf2$fcst[[name("cases")]][,"fcst"] * (ba_sums[1] - ba_sums[5]) / 1000)
