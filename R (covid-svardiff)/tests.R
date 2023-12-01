@@ -1,4 +1,9 @@
-create_cf_1(cf_mods$cf1a3, ci = 0.8)
+ggvar_fit(mod, #index = data$date[-(1:(n_vac - 1))]
+          args_facet = list(scales = "free_y", ncol = 1, labeller = labeller(serie = namings$vars)),
+) +
+  labs(title = "", y = "Valores", linetype = "Variável") +
+  ggwaves(TRUE) +
+  scale_y_continuous(n.breaks = 3, labels = sci)
 
 SVAR2 <- function (x, estmethod = c("scoring", "direct"), Amat = NULL, 
                    Bmat = NULL, start = NULL, max.iter = 100, conv.crit = 1e-07, 

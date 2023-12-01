@@ -1,3 +1,124 @@
+###### cf irfs plots
+sum(data$cases_s[n_vac:n] * (ba_sums[1] - ba_sums[5]) / 1000)
+sum(cf_preds$cf2$fcst[[name("cases")]][,"fcst"] * (ba_sums[1] - ba_sums[5]) / 1000)
+
+tibble(
+  actual = data$deaths_s[n_vac:n],
+  index = 1:length(actual),
+  irf.true = data$cases_s[n_vac:n] * ba_sums[1]/1000,
+  irf.cf = cf_preds$cf2$fcst[[name("cases")]][,"fcst"] * ba_sums[1]/1000,
+) %>%
+  pivot_longer(-index) %>%
+  ggplot(aes(index, value, color = name)) +
+  geom_line()
+
+tibble(
+  cf_no = data$cases_s[n_vac:n] * ba_sums[5]/1000,
+  cf_vac = data$cases_s[n_vac:n] * ba_sums[1]/1000,
+  index = 1:length(cf_no)
+) %>%
+  pivot_longer(-index) %>%
+  ggplot(aes(index, value, color = name)) +
+  geom_line()
+
+######
+create_cf_3 <- function(mod, ...) {
+  exogen <<- create_exogen(data, include, week, slice = (n_vac - mod$p):n) %>%
+    `[`(names(.) %in% colnames(mod$datamat))
+  data <- data %>% slice((n_vac - mod$p):n)
+  
+  pred <- map_dfc(1:mod$p, function(x) {
+    to <- nrow(data) + x - 1
+    map_dfc(
+      tibble(
+        "cases_s" := c(cf_preds$cf2$fcst$cases_s[,"fcst"], NA),
+        data[grep("deaths", names(data))]
+      ),
+      ~ c(.x, numeric(x))[x:to]) %>%
+      set_names(paste0(names(.), ".l", x))
+  }) %>%
+    tibble(
+      const = if (type %in% c("const", "both")) 1,
+      trend = if (type %in% c("trend", "both")) mod$p:(nrow(.) + mod$p - 1),
+      exogen
+    ) %>%
+    as.matrix()
+  
+  coefs <- mod$varresult[[name("death", data)]]$coefficients %>% .[!grepl("vaccines", names(.))]
+  cols <- grepl("deaths", colnames(pred))
+  
+  for (t in 1:nrow(pred)) {
+    values <- pred[t,] %>% .[names(.) %in% names(coefs)]
+    pred[t, cols] <- c(sum(coefs * values), pred[t, cols][-mod$p])
+  }
+  
+  yse <- get_yse(mod, n.ahead, n_pred = nrow(pred), ...) %>% .[,grep("death", colnames(.))]
+  
+  result <- list(
+    fcst = list(
+      as.matrix(tibble(
+        fcst = pred[-(1:mod$p), grep("death.+l1$", colnames(pred))],
+        lower = fcst - yse, upper = fcst + yse, CI = yse
+      ))
+    ) %>% set_names(grep("death", vars_order, value = TRUE)),
+    model = mod
+  )
+  
+  class(result) <- "varprd"
+  result
+}
+
+cf_plots$new <- ggvar_predict(
+  create_cf_3(mods_var$bf_no),
+  data[n_vac:n,],
+  args_facet = list(scales = "free_y")
+)
+
+apply(create_cf_3(mods_var$bf_no)$fcst$deaths_s[,-4], 2, \(x) sum(x - data$deaths_s[n_vac:n], na.rm = TRUE))
+
+
+
+##########
+cf_irf <- list(
+    cf = cf_preds$cf2$fcst[[name("cases")]][,"fcst"],
+    actual = data$cases_s[n_vac:n]
+  ) %>%
+  imap_dfc(~ tibble("{.y}_bf" := ba_sums[1] * .x/1000, "{.y}_af" := ba_sums[5] * .x/1000))
+
+cf_irf %>%
+  mutate(
+    index = 1:nrow(.),
+    deaths = data$deaths_s[n_vac:n]
+  ) %>%
+  pivot_longer(-c(index, deaths), names_sep = "_", names_to = c("base", "model")) %>%
+  ggplot(aes(index, value, color = model)) +
+  geom_line(linetype = 2) +
+  geom_line(aes(y = deaths), color = "black") +
+  facet_wrap(vars(base), nrow = 1)
+
+map(cf_irf, sum)
+
+cfpred = cf_preds$cf2$fcst[[name("deaths")]][,"fcst"],
+
+#map(list(sum = ba_sums, peak = ba_peak), function(response) {
+#  map(
+#    list(
+#      cf = cf_preds$cf2$fcst[[name("cases")]][,"fcst"],
+#      actual = data$cases_s[n_vac:n]
+#    ),
+#    ~ (response[1] - response[4:5]) * sum(.x)/1000
+#  )
+#})
+
+# deaths realizado
+# cases realizado * irf com
+
+# cases realizado * irf sem (iv)
+# cases cf * irf com (??)#cf.vac = cf_preds$cf2$fcst[[name("cases")]][,"fcst"] * ba_sums[5]/1000,
+
+# deaths cf
+# cases cf * irf sem (i)
+
 c(lin = "green", sqr = "red", const = "blue")[name]
 
 x <- findInterval(data$date, breaks_waves)

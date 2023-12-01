@@ -37,11 +37,11 @@ ccf_ba <- function(data_list, labels, ...) {
     geom_vline(xintercept = 0, color = "darkgray") +
     geom_hline(yintercept = 0) +
     geom_segment(aes(xend = Lag, yend = 0)) + 
-    geom_ribbon(aes(ymin = -ci, ymax = ci), linetype = 2, fill = NA, color = "blue") +
+    geom_ribbon(aes(ymin = -ci, ymax = ci), linetype = 2, fill = NA, color = pal[1]) +
     facet_wrap(vars(name), ncol = 3, labeller = labeller(
       name = set_names(labels, c("Before", "After", "Afterp"))
     )) +
-    labs(y = "Valor", x = "Lag (casos)")
+    labs(y = "Correlação", x = "Lag (casos)")
 }
 
 

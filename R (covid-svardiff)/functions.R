@@ -36,6 +36,7 @@ na_approx <- function(data) {
 
 create_exogen <- function(data, include = "none", week, breaks = vars_breaks, slice = NULL) {
   exogen <- list()
+  breaks <- unlist(breaks)
   
   if (include == "none") {
     return(NULL)
@@ -246,3 +247,153 @@ custom_predict <- function (object, ..., n.ahead = 10, ci = 0.95, dumvar = NULL,
   class(result) <- "varprd"
   return(result)
 }
+
+custom_boot <- function(x, scales = "free_y", lowerq = 0.16, upperq = 0.84, 
+                         percentile = "standard", selection = NULL, cumulative = NULL, 
+                         ..., base) {
+  probs <- NULL
+  V1 <- NULL
+  value <- NULL
+  cutt <- function(x, selind) {
+    x$irf <- x$irf[selind]
+    return(x)
+  }
+  agg <- function(x, aggind) {
+    x$irf[, aggind] <- cumsum(x$irf[aggind])
+    return(x)
+  }
+  kk <- ncol(x$true$irf)
+  k <- sqrt(kk - 1)
+  if (!is.null(cumulative)) {
+    aggind <- list()
+    temp <- (k * cumulative) + 1
+    for (i in 1:length(temp)) {
+      aggind[[i]] <- temp[i] - (k - c(1:k))
+    }
+    aggind <- unlist(aggind)
+    x$true <- agg(x$true, aggind)
+    x$bootstrap <- lapply(x$bootstrap, agg, aggind)
+  }
+  if (!is.null(selection)) {
+    selind <- list()
+    temp <- (k * selection[[1]]) + 1
+    for (i in 1:length(temp)) {
+      selind[[i]] <- temp[i] - (k - selection[[2]])
+    }
+    selind <- c(1, unlist(selind))
+    x$true <- cutt(x$true, selind)
+    x$bootstrap <- lapply(x$bootstrap, cutt, selind)
+    kk <- ncol(x$true$irf)
+  }
+  n.ahead <- nrow(x$true$irf)
+  bootstrap <- x$bootstrap
+  nboot <- length(bootstrap)
+  rest <- x$rest_mat
+  n.probs <- length(lowerq)
+  if (length(lowerq) != length(upperq)) {
+    stop("Vectors 'lowerq' and 'upperq' must be of same length!")
+  }
+  intervals <- array(0, c(n.ahead, kk, nboot))
+  for (i in 1:nboot) {
+    intervals[, , i] <- as.matrix(bootstrap[[i]]$irf)
+  }
+  lower <- array(0, dim = c(n.ahead, kk, n.probs))
+  upper <- array(0, dim = c(n.ahead, kk, n.probs))
+  if (percentile == "standard" | percentile == "hall") {
+    for (i in 1:n.ahead) {
+      for (j in 1:kk) {
+        lower[i, j, ] <- quantile(intervals[i, j, ], 
+                                  probs = lowerq)
+        upper[i, j, ] <- quantile(intervals[i, j, ], 
+                                  probs = upperq)
+      }
+    }
+    if (percentile == "hall") {
+      for (p in 1:n.probs) {
+        lower[, -1, p] <- as.matrix(2 * x$true$irf)[, 
+                                                    -1] - lower[, -1, p]
+        upper[, -1, p] <- as.matrix(2 * x$true$irf)[, 
+                                                    -1] - upper[, -1, p]
+      }
+    }
+  }
+  else if (percentile == "bonferroni") {
+    rest <- matrix(t(rest), nrow = 1)
+    rest[is.na(rest)] <- 1
+    rest <- c(1, rest)
+    for (i in 1:n.ahead) {
+      for (j in 1:kk) {
+        if (rest[j] == 0) {
+          lower[i, j, ] <- quantile(intervals[i, j, 
+          ], probs = (lowerq/n.ahead))
+          upper[i, j, ] <- quantile(intervals[i, j, 
+          ], probs = 1 + (((upperq - 1)/n.ahead)))
+        }
+        else {
+          lower[i, j, ] <- quantile(intervals[i, j, 
+          ], probs = (lowerq/(n.ahead + 1)))
+          upper[i, j, ] <- quantile(intervals[i, j, 
+          ], probs = 1 + (((upperq - 1)/(n.ahead + 
+                                           1))))
+        }
+      }
+    }
+  }
+  else {
+    stop("Invalid choice of percentile; choose between standard, hall and bonferroni")
+  }
+  alp <- 0.7 * (1 + log(n.probs, 10))/n.probs
+  irf <- reshape2::melt(x$true$irf, id = "V1")
+  cbs <- data.frame(V1 = rep(irf$V1, times = n.probs),
+                    variable = rep(irf$variable, times = n.probs),
+                    probs = rep(1:n.probs, each = (kk - 1) * n.ahead),
+                    lower = c(lower[, -1, ]), upper = c(upper[, -1, ]))
+  ggplot() +
+    geom_ribbon(data = cbs, aes(x = V1, ymin = lower, ymax = upper, group = probs),
+                alpha = alp, fill = NA, linetype = 2, color = pal[1]) + 
+    geom_line(data = irf, aes(x = V1, y = value)) +
+    geom_hline(yintercept = 0, color = "black") +
+    facet_wrap(~variable, scales = scales, labeller = label_parsed) +
+    xlab("Horizon") + ylab("Response") + 
+    theme_bw()
+}
+
+
+
+custom_irfs <- function(x, base, scales = "free_y", selection = NULL, cumulative = NULL, 
+          ...) {
+  cutt <- function(x, selind) {
+    x$irf <- x$irf[selind]
+    return(x)
+  }
+  agg <- function(x, aggind) {
+    x$irf[, aggind] <- cumsum(x$irf[aggind])
+    return(x)
+  }
+  kk <- ncol(x$irf)
+  k <- sqrt(kk - 1)
+  if (!is.null(cumulative)) {
+    aggind <- list()
+    temp <- (k * cumulative) + 1
+    for (i in 1:length(temp)) {
+      aggind[[i]] <- temp[i] - (k - c(1:k))
+    }
+    aggind <- unlist(aggind)
+    x <- agg(x, aggind)
+  }
+  if (!is.null(selection)) {
+    selind <- list()
+    temp <- (k * selection[[1]]) + 1
+    for (i in 1:length(temp)) {
+      selind[[i]] <- temp[i] - (k - selection[[2]])
+    }
+    selind <- c(1, unlist(selind))
+    x <- cutt(x, selind)
+  }
+  impulse <- reshape2::melt(x$irf, id = "V1")
+  ggplot(impulse, aes_(x = ~V1, y = ~value)) + geom_line() + 
+    geom_hline(yintercept = 0, color = "black") + facet_wrap(~variable, 
+                                                           scales = scales, labeller = label_parsed) + xlab("Horizon") + 
+    ylab("Response") + theme_bw()
+}
+
