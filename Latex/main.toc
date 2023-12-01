@@ -24,5 +24,6 @@
 \vspace {\cftbeforechapterskip }
 \contentsline {chapter}{Refer\^encias}{27}{section*.10}%
 \renewcommand *{\cftappendixname }{AP\^ENDICE \space }
-\contentsline {appendix}{\chapternumberline {A}\MakeTextUppercase []{IRF's Individuais}}{29}{appendix.A}%
-\contentsline {appendix}{\chapternumberline {B}\MakeTextUppercase []{Diagnósticos do VAR}}{30}{appendix.B}%
+\contentsline {appendix}{\chapternumberline {A}\MakeTextUppercase []{Diagnósticos do VAR}}{29}{appendix.A}%
+\contentsline {appendix}{\chapternumberline {B}\MakeTextUppercase []{Correlação dos Choques}}{32}{appendix.B}%
+\contentsline {appendix}{\chapternumberline {C}\MakeTextUppercase []{IRF's Individuais}}{33}{appendix.C}%

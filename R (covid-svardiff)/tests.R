@@ -1,9 +1,15 @@
-ggvar_fit(mod, #index = data$date[-(1:(n_vac - 1))]
-          args_facet = list(scales = "free_y", ncol = 1, labeller = labeller(serie = namings$vars)),
-) +
-  labs(title = "", y = "Valores", linetype = "Variável") +
-  ggwaves(TRUE) +
-  scale_y_continuous(n.breaks = 3, labels = sci)
+create_cf_2(cf_mods$cf1, ci = 0.8)
+
+
+# IRF's:
+single_mod <- mods_svar$afp_vac
+single_irfs <- custom_svars_fun(irf, single_mod, n.ahead = n.ahead)
+single_irfs$irf[,-1] <- single_irfs$irf[,-1] %>%
+  map2_dfc(rep(vars_sds[names(single_mod$VAR$varresult)], single_mod$K), ~ .x*1000/.y)
+colnames(single_irfs$irf) <- str_replace_all(colnames(single_irfs$irf), namings$vars)
+custom_irfs(single_irfs)
+#custom_ggsave("ap_irfs.png", w = w, h = h*1.25, scale = 1.5)
+
 
 SVAR2 <- function (x, estmethod = c("scoring", "direct"), Amat = NULL, 
                    Bmat = NULL, start = NULL, max.iter = 100, conv.crit = 1e-07, 
