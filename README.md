@@ -1,7 +1,5 @@
 # Covid SVAR Diff
-This is the repo for my graduation dissertation "Efeito Agregado das Vacinas do COVID-19 no Brasil, uma metodologia SVAR". See the paper in [overleaf](https://www.overleaf.com/read/yhksvkzwfttg#a84b8d).
-
-In progress...
+This is the repo for the revision of my graduation dissertation "Efeito Agregado das Vacinas do COVID-19 no Brasil, uma metodologia SVAR".
 
 
 ## Abstract
@@ -14,3 +12,12 @@ Finding evidence for the effectiveness of COVID vaccines is very important to gu
 The "Latex" directory has the .tex files to generate the paper .pdf
 
 The "R (covid-svardiff)" has the R files related to the empirical (and reproducible) analisys
+
+
+## Future Changes
+There are still some work to do. Besides what I list as "possible future expansions" in the text, which I won't be doing in this paper, there are still some improvements I want to do in the near future:
+
+- Add bootstraps for the IRF's;
+- Study using more traditional SVAR counterfactual methos, like the one used by the R function `svars::cf`;
+- Update the diagnostics appendix;
+- Create an package with the "method"'s functions, and reorganize the code.

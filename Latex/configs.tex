@@ -1,4 +1,4 @@
-% Custom cite links
+% Custom citation links:
 \DeclareFieldFormat{citehyperref}{%
   \DeclareFieldAlias{bibhyperref}{noformat}% Avoid nested links
   \bibhyperref{#1}}
@@ -33,42 +33,44 @@
     \restorebibmacro{textcite}%
     \usebibmacro{textcite}}}
 
-% -- Change chapter style
 
+% Change chapter style:
 \chapterstyle{section}
+
 %\makeatletter
 %\renewcommand\chapter{\@startsection {chapter}{0}{\z@}%
 %                                   {-4.5ex \@plus -1ex \@minus -.2ex}%
 %                                   {3.3ex \@plus.2ex}%
 %                                   {\normalfont\LARGE\bfseries}}
 %\makeatletter
+
 \renewcommand*{\chapnumfont}{\normalfont\LARGE\bfseries}
 \renewcommand*{\chaptitlefont}{\normalfont\LARGE\bfseries}
 
 \setlength{\afterchapskip}{0.5\baselineskip}
 \setlength{\beforechapskip}{2\baselineskip}
 
-% Capítulo sem pular pag
-
-
 
 % Configurações de aparência do PDF final
 \makeatletter
-\hypersetup{
-     	%pagebackref=true,
+\hypersetup{%pagebackref=true,
 		pdftitle={\@title}, 
 		pdfauthor={\@author},
     	pdfsubject={\imprimirpreambulo}
 }
 \makeatother
 
+
+% Custom title:
 \newcommand{\mytitle}[2]{\begin{center}#1\textbf{#2}\par\end{center}}
 
-% avoid footnotes restart numberig
+
+% Avoid footnotes restart numberig:
 \usepackage{remreset}
 \makeatletter
 \@removefromreset{footnote}{chapter}
 \newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
 \makeatother
+
 
 \endinput 

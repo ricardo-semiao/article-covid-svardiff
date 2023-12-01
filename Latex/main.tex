@@ -1,25 +1,31 @@
-% Básico
+% -------------------- CONFIGURAÇÕES --------------------
+% Básico:
 \documentclass[
+    article,
 	12pt,				% tamanho da fonte
-	%openright,			% capítulos começam em pág ímpar (insere página vazia caso preciso)
+	%openright,			% capítulos começam em pág ímpar
 	oneside,			% para impressão em recto e verso. Oposto a oneside
 	a4paper,			% tamanho do papel. 
 	english,			% idioma adicional para hifenização
-	brazil				% o último idioma é o principal do documento
+	brazil,				% o último idioma é o principal do documento
 	hyperref = {colorlinks, citecolor=c1d, linkcolor=c2d, urlcolor=c3d, colorlinks}
 	]{abntex2}
-\usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
-\usepackage[utf8]{inputenc}		% Codificacao do documento (conversão automática dos acentos)
-\usepackage{times}
+\usepackage[T1]{fontenc}		% selecao de codigos de fonte.
+\usepackage[utf8]{inputenc}		% codificacao do texto do documento
+\usepackage{times} % fonte
 
-% Layout
-\usepackage[left=3cm,right=2cm,bottom=2cm,top=3cm]{geometry} %definir margens
-\setlength{\parskip}{\baselineskip} %espaço vertical pós parágrafo
-\usepackage[bottom]{footmisc} %fixar footnote na parte de baixo da página
+% Layout:
+\usepackage[left=3cm,right=2cm,bottom=2cm,top=3cm]{geometry} % definir margens
+\setlength{\parskip}{\baselineskip} % espaço vertical pós parágrafo
+\usepackage[bottom]{footmisc} % fixar footnote na parte de baixo da página
+
+\usepackage{chngcntr}
+\counterwithin{section}{chapter}
+\AtBeginDocument{\addtocontents{toc}{\changetocdepth{1}}}
 
 % Cores:
 \usepackage{xcolor}
-\makeatletter %criar paletta "Dark2" do RColorBrewer (pacote do R)
+\makeatletter % criar paletta "Dark2" do RColorBrewer (pacote do R)
 \newcounter{j}
 \@for\i:={1B9E77, D95F02, 7570B3, E7298A, 66A61E, E6AB02, A6761D, 666666}\do{
     \stepcounter{j}
@@ -34,15 +40,15 @@
 
 % Referências:
 \usepackage[backend=biber, style=apa]{biblatex} 
-\usepackage{csquotes} %requerimento do biblatex
+\usepackage{csquotes} % requerimento do biblatex
 
 % Matemática
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{multicol}
 \usepackage{mathtools}
-\usepackage{bm} %símbolos em negrito
-\makeatletter %set vspace before and after equations
+\usepackage{bm} % símbolos em negrito
+\makeatletter % set vspace before and after equations
 \counterwithout{equation}{chapter}
 \g@addto@macro\normalsize{%
     \setlength\abovedisplayskip{-10pt}
@@ -57,11 +63,12 @@
 %\usepackage{todonotes} % to do notes
 \usepackage{float} % float options
 \usepackage{multirow}
-\input{configs.tex} %outras configurações em arquivo separado
+\input{configs.tex} % outras configurações em arquivo separado
 \addbibresource{references.bib}
-% ---
 
-% ---
+
+
+% -------------------- INFORMAÇÕES --------------------
 % Informações de dados para CAPA e FOLHA DE ROSTO
 \titulo{Efeito Agregado das Vacinas do COVID-19 no Brasil, uma metodologia SVAR}
 \autor{Ricardo Semião e Castro}
@@ -70,54 +77,32 @@
 \orientador{Marcel Bertini Ribeiro}
 \coorientador{}
 \instituicao{Fundação Getúlio Vargas\par
-             Escola de Economia de São Paulo} %Graduação?
-\tipotrabalho{Tese (Graduação)}
+             Escola de Economia de São Paulo}
+\tipotrabalho{Tese (Graduação), revisão}
 
-\preambulo{Dissertação para obtenção do grau de bacharelado apresentada à Escola de Economia de São Paulo. Área de concentração: epidemiologia}
+\preambulo{Revisão da dissertação para obtenção do grau de bacharelado apresentada à Escola de Economia de São Paulo. Área de concentração: epidemiologia}
 
 \makeindex % compila o indice
-% ---
 
 
-% ---
-% Início do documento
+
+% -------------------- DOCUMENTO --------------------
 \begin{document}
 
-% Seleciona o idioma do documento (conforme pacotes do babel)
-%\selectlanguage{english}
-\selectlanguage{brazil}
+\selectlanguage{brazil} %\selectlanguage{english}
+\frenchspacing % Retira espaço extra obsoleto entre as frases.
 
-% Retira espaço extra obsoleto entre as frases.
-\frenchspacing 
 
-% ----------------------------------------------------------
-% ELEMENTOS PRÉ-TEXTUAIS
-% ----------------------------------------------------------
-% \pretextual
 
-% ---
-% Capa
-% ---
+% ELEMENTOS PRÉ-TEXTUAIS ----------------------------------------
+
+% Capa:
 \imprimircapa
-% ---
 
-% ---
-% Folha de rosto
-% (o * indica que haverá a ficha bibliográfica)
-% ---
-\imprimirfolhaderosto*
-% ---
+% Folha de rosto:
+\imprimirfolhaderosto* % (o * indica que haverá a ficha bibliográfica)
 
-% ---
-% Inserir a ficha bibliografica
-% ---
-
-
-% Porém, provavelmente a biblioteca da sua universidade lhe fornecerá um PDF com a ficha catalográfica definitiva após a defesa do trabalho. Quando estiver com o documento, salve-o como PDF no diretório do seu projeto e substitua todo o conteúdo de implementação deste arquivo pelo comando abaixo:
-% \begin{fichacatalografica}
-%     \includepdf{fig_ficha_catalografica.pdf}
-% \end{fichacatalografica}
-
+% Ficha bibliografica:
 \begin{fichacatalografica}
 	\sffamily
 	\vspace*{\fill}					% Posição vertical
@@ -149,18 +134,13 @@
 	\end{minipage}}
 	\end{center}
 \end{fichacatalografica}
-% ---
 
+% Porém, provavelmente a biblioteca da sua universidade lhe fornecerá um PDF com a ficha catalográfica definitiva após a defesa do trabalho. Quando estiver com o documento, salve-o como PDF no diretório do seu projeto e substitua todo o conteúdo de implementação deste arquivo pelo comando abaixo:
+% \begin{fichacatalografica}
+%     \includepdf{fig_ficha_catalografica.pdf}
+% \end{fichacatalografica}
 
-
-% ---
-% Inserir folha de aprovação
-% Após aprovção, substitua todo o conteúdo deste arquivo por uma
-% imagem da página assinada pela banca com o comando abaixo:
-% \begin{folhadeaprovacao}
-% \includepdf{folhadeaprovacao_final.pdf}
-% \end{folhadeaprovacao}
-
+% Inserir folha de aprovação:
 \begin{folhadeaprovacao}
   \begin{center}
     {\ABNTEXchapterfont\large\imprimirautor}
@@ -195,41 +175,48 @@
   \end{center}
   
 \end{folhadeaprovacao}
-% ---
 
-% ---
-% Dedicatória (opcional)
+% Após aprovção, substitua todo o conteúdo deste arquivo por uma
+% imagem da página assinada pela banca com o comando abaixo:
+% \begin{folhadeaprovacao}
+% \includepdf{folhadeaprovacao_final.pdf}
+% \end{folhadeaprovacao}
+
+% Dedicatória (opcional):
+\newpage
 \begin{dedicatoria}
    \vspace*{\fill}
    \centering
    \noindent
    \textit{Dedico esse trabalho à todas as famílias que perderam entes queridos para o coronavirus}\vspace*{\fill}
 \end{dedicatoria}
-% ---
 
-% ---
-% Agradecimentos (opcional)
+% Agradecimentos (opcional):
+\newpage
 \begin{resumo}[Agradecimentos]
 Gostaria de agradecer o professor Marcel Bertini Ribeiro pelo incrível esforço feito em me orientar e contribuir para com o presente trabalho. Também sou grato pelos meus pais, que sempre incentivaram a busca de conhecimento. Por fim, gostaria de agradecer todos os professores, funcionários, e colegas da Escola de Economia de São Paulo, que contribuíram direto ou indiretamente para minha formação acadêmica. Um desses colegas, Juan Bonilla Villegas, merce um agradecimento especial, pois sua parceria sempre me encorajou a ir além nos estudos.
 \end{resumo}
-% ---
 
-% ---
-% RESUMOS
-% resumo em português
+
+
+% RESUMOS ----------------------------------------
+
+% resumo em português:
 \setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
+\newpage
 \begin{resumo}
-   Encontrar evidências para a efetividade das vacinas do COVID-19 é muito importante para guiar a ação de \textit{policymakers}, ainda mais dado o quão recente a pandemia é. Esta tese contribui com essa literatura ao utilizar um SVAR, motivado e identificado utilizando um modelo epidemiológio SIR. A captura das dinâmicas temporais entre as variáveis, o relaxamento de hipóteses de taxas de infecção, mortalidade, e vacinação constantes no tempo, e o potencial de gerar diferentes tipos de resultados, são os benefícios principais desse método. Foi descoberto que resposta de mortes à um choque de 1000 casos foi 81\% (ou 18.21, em termos absolutos) menor depois da inclusão das vacinas. Também foi feita uma análise de contrafactuais, indicando que o número de vidas salvas vai de um \textit{lower bound} de 31mil a um \textit{upper bound} de 281mi (mas há indícios que essa banda é substancialmente menos larga).
+   Encontrar evidências para a efetividade das vacinas do COVID-19 é muito importante para guiar a ação de \textit{policymakers}, ainda mais dado o quão recente a pandemia é. Esta tese contribui com essa literatura utilizando uma \textit{Structural Vector Auto-Regression} para modelar a relação entre as variáveis, motivada e identificada por um modelo epidemiológio SIR. A captura das dinâmicas temporais entre as variáveis, o relaxamento de hipóteses de taxas de infecção, mortalidade, e vacinação constantes no tempo, e o potencial de gerar diferentes tipos de resultados, são os benefícios principais desse método. Foi descoberto que resposta de mortes à um choque de $1000$ casos foi $60$\% (ou $10,24$, em termos absolutos) menor depois da inclusão das vacinas. Também foi feita uma análise de contrafactuais, indicando que o número de vidas salvas vai de um \textit{lower bound} de $16$ mil a um \textit{upper bound} de $279$ mil, com indícios de maior proximidade do segundo.
    \vspace{\onelineskip}
  
    \noindent
    \textbf{Palavras-chave}: Coronavirus. Vacinação. Efeito Causal. SVAR.
 \end{resumo}
 
-% resumo em inglês
+% resumo em inglês:
+\newpage
 \begin{resumo}[Abstract]
 \begin{otherlanguage*}{english}
-   Finding evidence for the effectiveness of COVID vaccines is very important to guide the action of policymakers, especially considering how recent the pandemic is. This thesis contributes to literature by using an SVAR, motivated by and identifyed by a SIR epidemiological model. The capture of temporal dynamics between variables, the relaxation of assumptions on infection, mortality, and vaccination rates constant over time, as well as the potential of generating different types of results are this method’s main benefits. It was discovered that the response of deaths to a shock of 1000 cases was 81\% (or 18.21, in absolute terms) less than after the inclusion of vaccines. There was also an analysis of counterfactuals, indicating that the number of lives saved goes from \textit{lower bound} of 31 thousand to a \textit{upper bound} of 281 thousand (but there is indication that this band is substantially less wide).
+   Finding evidence for the effectiveness of COVID vaccines is very important to guide the action of policymakers, especially considering how recent the pandemic is. This thesis contributes to literature by using an Structural Vector Auto-Regression to model the relationship between the variables, motivated by and identifyed by a SIR epidemiological model. The capture of temporal dynamics between variables, the relaxation of assumptions on infection, mortality, and vaccination rates constant over time, as well as the potential of generating different types of results are this method’s main benefits. It was discovered that the response of deaths to a shock of $1000$ cases was $60$\% (or $10,24$, in absolute terms) less than after the inclusion of vaccines. There was also an analysis of counterfactuals, indicating that the number of lives saved goes from \textit{lower bound} of $16$ thousand to a \textit{upper bound} of $279$ thousand, with clues to a proximity to the latter.
 
    \vspace{\onelineskip}
  
@@ -237,64 +224,74 @@ Gostaria de agradecer o professor Marcel Bertini Ribeiro pelo incrível esforço
    \textbf{Keywords}: Coronavirus. Vaccination. Causal Effect. SVAR
 \end{otherlanguage*}
 \end{resumo}
-% ---
 
 
-% ---
-% inserir o sumario
+% Sumário:
 \pdfbookmark[0]{\contentsname}{toc}
+\newpage
 \tableofcontents*
 \cleardoublepage
-% ---
 
 
-
-% ----------------------------------------------------------
-% ELEMENTOS TEXTUAIS
-% ----------------------------------------------------------
+% ELEMENTOS TEXTUAIS ----------------------------------------
 \textual
-\pagestyle{plain}
-%\aliaspagestyle{chapter}{plain}
-
+\pagestyle{plain} %\aliaspagestyle{chapter}{plain}
 
 \chapter{Introdução}
-A pandemia do coronavirus (COVID-19) causou mais de $32,2$ milhões casos e $671$ mil mortes no Brasil\footnote{JHU CSSE COVID-19 Data, dados de junho de 2022}, se tornando a prioridade número um no que tange desenvolver intervenções na área da saúde. A vacinação já se provou indiscutivelmente efetiva no controle de uma série de outras doenças, e existem muitos artigos com abordagens quase-experimentais atestando a diminuição da intensidade da pandemia trazia pelas vacinas para COVID-19.
+A pandemia do coronavirus (COVID-19) causou mais de $38$ milhões casos e $707$ mil mortes no Brasil\footnote{Dados do Ministério da Saúde (\url{https://covid.saude.gov.br}), de dezembro/2023}, portanto, estudar a eficácia das intervenções disponíveis é de suma importância.
 
-Como a pandemia do coronavirus ainda é muito recente, existe bastante espaço para novas evidências acerca da eficiência da vacinação, quanto mais informação sobre o tópico, mais insumos os \textit{policymakers} terão para definir o nível e urgência do gasto com vacinas.
+A vacinação já se provou indiscutivelmente efetiva no controle de uma série de outras doenças, e existem muitos artigos com abordagens quase-experimentais atestando a diminuição da intensidade da pandemia trazia pelas vacinas para COVID-19. Ao mesmo tempo, ainda existe espaço para novas evidências acerca da eficiência da vacinação.
 
-A presente tese inova ao propor um método de estimação com base em um \textit{Structural Vector Auto-Regression} (SVAR) que, no melhor de meu saber, ainda não foi utilizado na literatura. A defesa desse método vem com base no celebrado modelo epidemiológico SIR, que explicita a natureza interconectada e temporalmente dinâmica das variáveis de interesse, algo que o SVAR consegue modelar muito bem.
+A presente tese inova ao propor um método de estimação com base em um \textit{Structural Vector Auto-Regression} (SVAR) que, no melhor de meu saber, ainda não foi utilizado na literatura. A defesa desse método vem com base no celebrado modelo epidemiológico SIR, que explicita a natureza interconectada e temporalmente dinâmica das variáveis de interesse, algo que um SVAR consegue modelar muito bem.
 
-Existem diferentes medidas para avaliar eficácia, algumas na linha de efeito marginal da vacina, outras na linha do efeito total da política de vacinação. Como mostrarei, o SVAR tem o potencial para criar estimativas de ambos através das funções de resposta ao impulso (IRF's) e da criação de contrafactuais. Essas funções também ajudam a responder outras perguntas de interesse, como descrever mais a fundo como o efeito das vacinas progride com o passar do tempo, e quanto do efeito da vacinação é direto (diminuição da mortalidade) e indireto (alteração do comportamento da população, alteração do tempo de permanência da doença no corpo, entre outros).
+Existem diferentes medidas para avaliar eficácia, algumas na linha de efeito marginal da vacina, outras na linha do efeito total da política de vacinação. Como mostrarei, o SVAR tem o potencial para criar estimativas de ambos através das funções de resposta ao impulso (IRF's) e da criação de contrafactuais. 
 
 Adicionalmente, o SVAR também permite relaxar hipóteses que outros métodos de estimação costumam fazer, ao ter as taxas de infecciosidade, mortalidade, e vacinação como dependentes da intensidade da pandemia no passado.
 
-A principal limitação desse tipo de modelo é a identificação dos choques de cada variável, mas a teoria por trás dos modelos SIR motivou a realização de uma decomposição de Cholesky, na ordem de casos-vacinas-mortes, gerando uma identificação consistente do choque de casos. Por mais que os outros dois choques não tenham uma interpretação tão clara, a metodologia descrita nos próximos parágrafos não é afetada por isso.
+A principal limitação desse tipo de modelo é a identificação dos choques de cada variável. A teoria por trás dos modelos SIR motivou a realização de uma decomposição de Cholesky, na ordem de casos-vacinas-mortes, gerando uma identificação consistente do choque de casos. Por mais que os outros dois choques não tenham uma interpretação tão clara, a metodologia descrita nos próximos parágrafos não é afetada tão intensamente por esse problema.
 
-O principal resultado deste trabalho vem da análise da variação no modelo antes e depois da introdução da política de vacinas, que gerou insumos para entender a mortalidade de um choque de casos pré e pós vacinas. Antes, um choque de 1.000 casos gerava aproximadamente 8,71 mortes em uma semana, sendo que essa resposta se estabilizava em torno do zero apenas após 4 semanas. Após as vacinas, esse mesmo choque gerou uma resposta de aprox. 1,28 mortes, também se estabilizando em torno do zero subsequentemente. A diferença das somas dessas funções é de 18.21 mortes a menos, ou uma queda de 81\% na mortalidade de um choque de casos, atestando a importância da vacinação no Brasil. Esses resultados são consistentes com a análise exploratória das variáveis, que indica uma grande redução nas correlações cruzadas entre casos e mortes pós introdução das vacinas.
+O principal resultado deste trabalho vem da análise da variação no modelo antes e depois da introdução da política de vacinas, que gerou insumos para entender a mortalidade de um choque de casos pré e pós vacinas. Antes, um choque de $1.000$ casos gerava aproximadamente $16,91$ casos ao longo das semanas subsequentes, e depois, apenas $6,67$, uma redução de $60$\%, atestando a importância da vacinação no Brasil. Esses resultados são consistentes com a análise exploratória das variáveis, que indica uma grande redução nas correlações cruzadas entre casos e mortes pós introdução das vacinas.
 
-Adicionalmente a relação entre as variáveis descoberta no SVAR foi utilizada para criar o contrafactual onde nunca houve a política de vacinação. Foram testados vários métodos diferentes, o que permitiu a estimação de um \textit{lower bound} de 31mil vidas salvas, contra um \textit{upper bound} de 281mi. Essa banda é bastante larga, mas o resultado do parágrafo anterior, e resultados de outros trabalhos, indicam que o \textit{lower boumd} está subestimado, assim como a construção do \textit{upper bound} também gera uma superestimação.
+Outra abordagem foi utilizar o SVAR para criar contrafactuais onde nunca houve a política de vacinação. Foram testados vários métodos diferentes, o que permitiu a estimação de um \textit{lower bound} de $16$ mil vidas salvas, contra um \textit{upper bound} de $279$ mil. Essa banda é bastante larga, mas o resultado do parágrafo anterior, e resultados de outros trabalhos, indicam que o resultado está longe dos limites, com maior proximidade do \textit{upper bound}.
 
 A organização do restante da tese segue: a seção 2 descreve os estudos sobre vacinas do COVID-19 já feitos; a seção 3 apresenta o modelo SIR, motivando o SVAR; os dados são descritos na seção 4; a seção 5 traz o modelo econométrico estimado; 6 mostra os resultados; e por fim, concluo na seção 7.
 
+
+
 \let\clearpage\relax
 \chapter{Revisão de Literatura}
-\cite{Halloran1999} separa a literatura sobre efetividade de vacinas na busca de quatro efeitos diferentes: efeito direto ($E[Si \,|\, Vi]$), efeito indireto ($E[Si \,|\, \neg Vi,\, Vp]$), efeito total ($E[Sp \,|\, Vp, Vi] - E[Sp \,|\, \neg Vp, \neg Vi]$), e efeito geral ($E[Sp \,|\, Vp] - E[Sp \,|\, \neg Vp]$), onde $Sx$ é o estado de saúde individual ($x=i$) ou populacional ($x=p$), e $Vx$ é o indicativo de indivíduo ou população vacinada. Os três primeiros efeitos são à nível individual, mas nesta tese busco o efeito geral da vacina, agregando tanto os efeitos diretos, quanto os indiretos, à nível populacional.
 
-Os estudos sobre o efeitos individuais passam por estudos laboratoriais, de caso-controle, de coorte, e quase experimentais como escore de propensão. Já a literatura sobre o efeito agregado é mais diversa, podendo ser dividida em: (i) métodos que constroem um contrafactual com base em modelos teóricos e/ou preditivos; (ii) métodos quase-experimentais como séries temporais interrompidas, diferenças em diferenças, e desenhos de regressão descontínua; (iii) métodos de regressão com variáveis contínuas, como regressões \textit{cross-section}, em painel, e métodos com variáveis instrumentais.
+\section{Abordagens}
 
-Os dois primeiros tipos de modelos são bons para estimar efeitos agregados, por gerar um contrafactual simples de interpretar. O primeiro modelo, porém, têm o ponto negativo de não ser muito ``agnóstico'', por assumir um modelo populacional muitas vezes bastante específico. Já o segundo, não analisa a dimensão contínua do tratamento das vacinas. O último tipo de modelo não traz a robustez de uma análise quase-experimental, mas consegue trazer resultados com base na intensidade da intervenção das vacinas.
+\cite{Halloran1999} separa a literatura sobre efetividade de vacinas na busca de quatro efeitos:
 
-Com base nesses prós e contras, argumento que existe uma janela para a aplicação de um modelo de vetor auto-regressivo estrutural. O SVAR consegue utilizar as variáveis contínuas, gera as funções de resposta ao impulso - melhores para interpretar o efeito agregado da vacina que os resultados de regressões ``comuns'' - e dá atenção especial para a relação inter-temporal das variáveis, algo que argumentarei ser muito importante na seção seguinte.
+\begin{itemize}
+    \item Efeito direto: $E[Si \,|\, Vi]$;
+    \item Efeito indireto: $E[Si \,|\, \neg Vi,\, Vp]$;
+    \item Efeito total: $E[Sp \,|\, Vp, Vi] - E[Sp \,|\, \neg Vp, \neg Vi]$;
+    \item Efeito geral: $E[Sp \,|\, Vp] - E[Sp \,|\, \neg Vp]$.
+\end{itemize}
 
-Uma das principais limitações do SVAR é a necessidade de fazer uma hipótese apriorística de identificação sobre a relação contemporânea dos choques de cada variável. A literatura encontrou várias maneiras diferentes de explorar as relações teóricas entre as variáveis para criar hipóteses críveis, como identificações por efeitos de curto e longo prazos, e restrições de sinais. Porém, não foi possível identificar nenhum paralelo entre a teoria epidemiológica e as possíveis identificações mais rebuscadas. Porém, a literatura SIR apresenta argumentos para uma identificação por decomposição de Cholesky\footnote{Que consiste em assumi diferentes ordenamentos de relações contemporâneas entre as variáveis} na ordem de casos-vacinas-mortes. 
+Onde $Sx$ é o estado de saúde individual ($x=i$) ou populacional ($x=p$), e $Vx$ é o indicativo de indivíduo ou população vacinada. Os três primeiros efeitos são à nível individual, mas nesta tese busco o efeito geral da vacina, agregando tanto os efeitos diretos, quanto os indiretos, à nível populacional.
+
+Os estudos sobre o efeitos individuais passam por estudos laboratoriais, de caso-controle, de coorte, e quase experimentais como escore de propensão. Já a literatura sobre o efeito agregado é mais diversa, podendo ser dividida em: (i) métodos que constroem um contrafactual com base em modelos teóricos e/ou preditivos; (ii) métodos quase-experimentais como séries temporais interrompidas, diferenças em diferenças, e desenhos de regressão descontínua; (iii) métodos de regressão com variáveis contínuas, como regressões \textit{cross-section}, em painel, ou com variáveis instrumentais.
+
+Os grupos (i) e (ii) são bons para estimar efeitos agregados, por gerarem um contrafactual simples de interpretar. O primeiro, têm o ponto negativo de não ser muito ``agnóstico'', ao assumir um modelo populacional muitas vezes bastante específico. Já o segundo, não analisa a dimensão contínua do tratamento das vacinas. O grupo (iii) não traz a robustez de uma análise quase-experimental, mas consegue trazer resultados com base na intensidade da intervenção das vacinas.
+
+Com base nesses prós e contras, argumento que existe uma janela para a aplicação de um modelo \textit{Structural Vector Auto Regressive}. O SVAR consegue utilizar as variáveis contínuas, gera vários tipos de resultado diferentes, e dá atenção especial para a relação inter-temporal das variáveis, algo que argumentarei ser muito importante na seção \ref{sec:teorico}.
+
+
+\section{Resultados Existentes}
 
 Pelo meu conhecimento, o uso de SVAR'es nessa literatura é no mínimo incomum, e não existe nenhum trabalho aplicando esse método em dados da pandemia do COVID-19. Similarmente, os estudos utilizando vacinas como uma variável contínua também são escassos. A seguir apresento os estudos mais comparáveis com a presente tese.
 
-\textcite{Barro2022} mede o efeito da taxa de vacinação na taxa de mortes e casos, com base em dados a nível individual dos EUA. O estudo realiza regressões \textit{cross-section} em modelos de \textit{seemingly unrelated regressions} (SUR) e variáveis instrumentais (IV), para lidar com a possibilidade de causalidade reversa. A amostra é dividida entre quatro períodos diferentes, cada um com seu conjunto de regressões. Os resultados indicam que a vacina não parece fazer efeito no início da pandemia. Além disso, um aumento de um ponto percentual na taxa de vacinação diminui a taxa de mortalidade em 0.01 pontos percentuais, no período de pico, sendo um pouco menor antes e depois. O efeito na taxa de casos é parecido para os dois períodos medianos, indicando uma diminuição próxima de 0.45 pontos percentuais.
+\textcite{Barro2022} mede o efeito da taxa de vacinação na taxa de mortes e casos, com base em dados a nível individual dos EUA. O estudo realiza regressões \textit{cross-section} em modelos de \textit{seemingly unrelated regressions} e variáveis instrumentais, para lidar com a possibilidade de causalidade reversa. A amostra é dividida entre quatro períodos diferentes, cada um com seu conjunto de regressões. Os resultados indicam que a vacina não parece fazer efeito no início da pandemia. Além disso, um aumento de um ponto percentual na taxa de vacinação diminui a taxa de mortalidade em $0,01$ pontos percentuais, no período de pico, sendo um pouco menor antes e depois. O efeito na taxa de casos é parecido para os dois períodos medianos, indicando uma diminuição próxima de $0,45$ pontos percentuais.
 
-\textcite{Chen2022} calcula o efeito do número de vacinas por cem habitantes na taxa de crescimento de casos e hospitalizações, com dados diários a nível estadual, e regressões em painel com efeitos fixos de tempo e estado. O resultado principal é uma redução de 0.7 pontos percentuais (com erro padrão de 0.2\ p.p.) na taxa de crescimento, para um aumento de uma vacina por 100 habitantes.
+\textcite{Chen2022} calcula o efeito de vacinas por cem habitantes na taxa de crescimento de casos e hospitalizações, com dados diários de estados americanos, utilizando regressões em painel com efeitos fixos de tempo e estado. O resultado principal é uma redução de $0,7$ pontos percentuais (com erro padrão de $0,2$\ p.p.) na taxa de crescimento, para um aumento de uma vacina por $100$ habitantes.
 
-\textcite{Ferreira2021} utiliza econometria Bayesiana para criar um contrafactual brasileiro onde não houveram vacinas. O efeito encontrado é um \textit{lower-bound} porque somente leva em conta o efeito direto da vacina, sem incluir o efeito de imunidade de rebanho. De acordo com as estimativas, a política de imunização durante janeiro a setembro de 2021, salvou diretamente 75 mil vidas.
+\textcite{Ferreira2021} utiliza econometria Bayesiana para criar um contrafactual brasileiro onde não houveram vacinas. O efeito encontrado é um \textit{lower-bound} porque somente leva em conta o efeito direto da vacina, sem incluir o efeito de imunidade de rebanho. De acordo com as estimativas, a política de imunização durante janeiro a setembro de 2021, salvou diretamente $75$ mil vidas.
+
+
 
 \let\clearpage\relax
 \chapter{Modelo Teórico}\label{sec:teorico}
@@ -305,7 +302,7 @@ Para motivar a utilização de um SVAR, apresento o modelo SIRDV (uma extensão 
 
 O modelo SIRDV é um sistema de equações que explica quantas pessoas estão em diferentes compartimentos da sociedade, nomeadamente: Suscetíveis $S(t)$, Infectados $I(t)$, Recuperados $R(t)$, Mortos $D(t)$, e Vacinados $V(t)$.
 
-No dia $t$, o número de novos infectados é proporcional ao número de infectados na população em $t-1$ $I(t-1)$, ao número de pessoas suscetíveis $S(t-1)$, e à taxa de infecciosidade do vírus -- que por sua vez é inversamente proporcional ao grau de distanciamento social d(t) sendo empregado -- $\beta(d(t))$. Também em $t$, uma proporção $\upsilon$ dos suscetíveis são vacinados. Ambos os grupos deixam de fazer parte dos suscetíveis a partir de $t+1$. Por fim, Dentre os infectados, parte se recupera da doença $\tau I(t-1)$, mas parte falece $\eta I(t-1)$, gerando o seguinte sistema:
+No dia $t$, o número de novos infectados é proporcional ao número de infectados na população em $t-1$ -- $I(t-1)$ --, ao número de pessoas suscetíveis -- $S(t-1)$ --, e à taxa de infecciosidade do vírus\footnote{Que por sua vez é inversamente proporcional ao grau de distanciamento social $d(t)$ sendo empregado} -- $\beta(d(t))$. Também em $t$, uma proporção $\upsilon$ dos suscetíveis são vacinados. Ambos os grupos deixam de fazer parte dos suscetíveis a partir de $t+1$. Por fim, dentre os infectados, uma fração $\tau$ se recupera da doença, mas fração $\eta$ falece, gerando o seguinte sistema:
 
 \begin{align*}
     S(t) &= S(t-1) - \upsilon S(t-1) - \beta(d(t-1))S(t-1)I(t-1)\\
@@ -315,7 +312,7 @@ No dia $t$, o número de novos infectados é proporcional ao número de infectad
     V(t) &= V(t-1) + \upsilon S(t-1)
 \end{align*}
 
-O formato de $X(t) = X(t-1) + ...$ já indica similaridades com um vetor auto-regressivo, mas para entrar em maior detalhe, o efeito da vacina é decomposto na figura \ref{fg:sirv} e explicado a seguir.
+O formato de $X(t) = X(t-1) + ...$ já indica similaridades com um vetor auto-regressivo. Para mais detalhes, o efeito da vacina é decomposto na figura \ref{fg:sirv} e explicado a seguir.
 
 A vacinação de um indivíduo em $t-1$ diminui $S(t)$ em $1$. Essa diminuição é carregada para $S(t+1)$ em diante. Menos pessoas suscetíveis em $t-1$ implica em menos pessoas infectadas no período seguinte, através da derivada:
 
@@ -383,124 +380,156 @@ Adicionalmente, como o valor de $I(t)$ foi reduzido pela vacina em $e(t-1)$, a d
 \end{tikzpicture}
 \end{figure}
 
-\section{Implicações Para a Estimação}\label{sec:teorico2}
+
+\section{Relação Com o Modelo SVAR}\label{sec:teorico2}
 
 Fica claro que a relação entre as variáveis não é trivial, e tem uma natureza muito interconectada, inclusive com \textit{lag's} das outras variáveis. Um modelo SVAR consegue capturar essa dinâmica, e de uma maneira muito menos restritiva, permitindo relações diretas das outras variáveis $R(t)$, $D(t)$, e $V(t)$ nas outras equações. Por exemplo, a hipótese de que pessoas que se infectaram nunca poderão se infectar novamente é relaxada, bem como a hipótese que a taxa de vacinação é dada exógenamente e não dependa da intensidade da pandemia.
 
-Vale notar, porém, que o termo de novos infectados no modelo SIRDV é uma interação não-linear das variáveis, o que não será modelado no SVAR. O resultado do modelo será, então, uma aproximação linear do efeito da vacina, que pode na realidade depender do nível das outras variáveis, inclusive da própria vacinação. Entretando, essa é a realidade, de muitos dos métodos de estimação com base em regressão já estabelecidos na análise empírica de pandemias.
+Vale notar, porém, que o termo de novos infectados no modelo SIRDV é uma interação não-linear das variáveis, o que não será modelado no SVAR. O resultado do modelo será, então, uma aproximação linear do efeito da vacina, que pode na realidade depender do nível das outras variáveis, inclusive da própria vacinação.
+
+Essa é a realidade de muitos dos métodos de estimação com base em regressão já estabelecidos na análise empírica de pandemias, mas uma possível expansão do presente trabalho é explorar esses efeitos não-lineares.
+
+
+\subsection{Efeitos a Estimar}
 
 O modelo SIRDV também ajuda a esclarecer as diferentes maneiras de se estimar o efeito da vacina:
 
 \begin{itemize}
-    \item O efeito marginal de $V(j)$ em $[X(i)]_{i=j+1}^\infty$, sendo $X$ casos ou mortes;
-    \item $[X'(i) - X(i)]_{i=1}^\infty$, onde $X(i)$ é o factual e $X'(i)$ é o contrafactual em que $[V(i)]_{i=1}^\infty = (0, 0, 0, \dots)$;
-    \item Seja $f$ a função do efeito causal que casos gera em mortes ($D_t = f([C(i)]_{i=1}^{t-1})$), podemos comparar $f|[V(i)]_{i=1}^\infty$ com $f|[V'(i)]_{i=1}^\infty$.
+    \item O efeito marginal de $V(j)$ em $[X(i)]_{i=j+1}^\infty$, sendo $X$ casos ou mortes realizados;
+    \item $[X'(i) - X(i)]_{i=1}^\infty$, onde $X'(i)$ é o contrafactual em que $[V(i)]_{i=1}^\infty = (0, 0, \dots)$;
+    \item Seja $f$ a função do efeito causal que $I(i)$ gera em $D(i)$: $D_t = f([I(i)]_{i=1}^{t-1})$,\\ podemos comparar $f$ do factual com $f'$ do contrafactual.
 \end{itemize}
 
-O SVAR permite, uma abordagem diferente para cada efeito acima. O primeiro efeito pode ser analisado pela IRF de vacinas em casos/mortes, providenciado que o choque de vacinas esteja bem identificado, e que o SVAR não sofra com variáveis omitidas. O segundo efeito pode ser medido através da criação de um contrafactual, algo que pode ser construído a partir de um VAR estimado no período pré vacinas, providenciado que a relação entre casos e mortes só se altere por causa da vacina durante o período estudado. O terceiro efeito pode ser estimado comparando as IRF's de um SVAR estimado pré vacinas, e de outro estimado pós vacinas.
+O SVAR permite, uma abordagem diferente para cada efeito acima. O primeiro efeito pode ser analisado pela IRF de vacinas em casos/mortes, providenciado que o choque de vacinas esteja bem identificado, e que o SVAR não sofra com variáveis omitidas. O segundo efeito pode ser medido através da criação de um contrafactual, algo que será feito com diferentes métodos. O terceiro efeito pode ser estimado comparando as IRF's de um SVAR estimado pré vacinas, e de outro estimado pós vacinas.
 
-A última abordagem, além de ser interessante por si só, tem uma certa robustez. Como estamos olhando para a variação do modelo, mesmo que ele apresente alguma falha, a mudança proporcional não deve ser tão diferente da mudança proporcional do modelo populacional, por mais que as IRF's de um, tomadas individualmente, sejam diferentes das IRF's do outro.
+A última abordagem, além de ser interessante por si só, tem uma certa robustez. Como estamos olhando para a variação do modelo, mesmo que ele apresente alguma falha, a mudança proporcional não deve ser tão diferente da mudança proporcional do modelo correto, por mais que as IRF's de um, tomadas individualmente, sejam diferentes das IRF's do outro.
 
-``Tomar a IRF individualmente'' é exatamente o que a primeira abordagem faz, ficando claro que ela não é tão robusta. Como nem a identificação do choque de vacinas, nem a inexistência de variáveis omitidas podem ser garantidos, essa abordagem não foi realizada neste trabalho.
+``Tomar a IRF individualmente'' é exatamente o que a primeira abordagem faz, ficando claro que ela não é tão robusta. Como nem a identificação do choque de vacinas, nem a inexistência de variáveis omitidas podem ser garantidos, essa abordagem foi deixada para o apêndice.
 
-O modelo SIRDV também ajuda a entender seu papel do distanciamento social na estimação do SVAR, através da forma funcional de $\beta(d(t))$. Boa parte dos estudos em modelos SIR derivam um modelo de escolha individual do distanciamento ótimo, baseado na troca entre custo econômico de diminuir sua mobilidade, e o ganho em menor probabilidade de infecção. \textcite{Reluga2010} utiliza um modelo -- que foi replicado para a crise atual por \textcite{Cabrera2021}, \textcite{Mwalili2020}, e \textcite{Baker2020} -- onde os indivíduos escolhem se distanciar mais quando pandemia está mais ``intensa'', e o risco de infecção é maior, logo $d(t)$ seria proporcional ao número de casos diários. Poderia-se expandir esse pensamento, e concluir que $d(t)$ também seria proporcional ao número de mortes, e inversamente proporcional ao número de vacinas.
 
-A hipótese ``única variação ser a da vacina'' pode não valer se alguma outra mudança entre casos mortes não relacionada à vacinação ocorreu no mesmo período. Nesse sentido, a possível diminuição do distanciamento social dada uma maior confiança da população recém imunizada pode ser um problema; Além dessa, a imunização natural vinda das pessoas que já tiveram a doença também está em níveis maiores no momento da vacina (comparando com o momento pré vacinação). Porém, a diminuição do distanciamento deve aumentar o número de mortes, logo a mudança estimada em $f$ estaria subestimada, e não o contrário, além do que -- como o parágrafo anterior mostrou --, as variáveis inclusas no SVAR já ajudam a controlar por esse efeito. O aumento na imunização natural geraria uma superestimação problemática de $f$, porém, a proporção de casos recuperados até o início da vacinação era de apenas 4.08\% da população, comparado com 88.2\% da população com primeira dose, 81.2\% com a segunda, e 55.9\% com a terceira, de modo que essa superestimação deve ser irrisória. Por fim, tanto as mutações do COVID-19, quanto as diferentes ``marcas'' de vacinas podem atrapalhar a análise, uma vez que a eficácia da vacinação varia muito a depender dessas características.
+\subsection{Distanciamento Social e Variáveis Omitidas}
 
-\subsection{Implicações Para a Identificação do SVAR}
+O modelo SIRDV também ajuda a entender seu papel do distanciamento social na estimação do SVAR, através da forma funcional de $\beta(d(t))$. Boa parte dos estudos em modelos SIR derivam um modelo de escolha individual do distanciamento ótimo, baseado na troca entre custo econômico de diminuir sua mobilidade, e o ganho em menor probabilidade de infecção. \textcite{Reluga2010} utiliza um modelo -- que foi replicado para a crise atual por \textcite{Cabrera2021}, \textcite{Mwalili2020}, e \textcite{Baker2020} -- onde os indivíduos escolhem se distanciar mais quando pandemia está mais ``intensa'', e o risco de infecção é maior, logo $d(t)$ seria proporcional ao número de casos diários. Similarmente, a população fica mais ``confiante'' após se vacinar, e relaxa o distanciamento.
 
-Embora a literatura epidemiológica não gere insumos para nenhuma identificação de SVAR mais rebuscada, podemos utilizar os tópicos discutidos até o momento para justificar a ordem da decomposição de Cholesky. Em primeiro lugar, por mais que o SIR não preveja nenhum tipo de efeito contemporâneo, os resíduos do VAR apresentaram correlação (como será mostrado na seção de resultados), portanto, a ordem da decomposição será importante.
+Pode-se concluir que $d(t)$ deve ser proporcional ao número de mortes, e inversamente proporcional ao número de vacinas. Isso implica que, embora seja importante levar em conta o distanciamento na estimação empírica -- e isso ficará claro nos dados --, parte da dinâmica já é controlada pelas próprias variáveis de casos, vacinas, e mortes.
 
-As evidências laboratoriais a favor das vacinas do COVID-19 indicam que a variável de mortes é endógena. Similarmente, a maior incidência de casos gera um efeito direto em aumentar a probabilidade de um maior número de mortes, inclusive através de prejudicar a provisão de serviços públicos de saúde.
+Para que a análise ``antes e depois'' não contenha viéses, a única variação entre os períodos deveria ser a presença da vacina e como ela altera a relação casos \& mortes. E essa hipótese não deve estar completamente satisfeita por alguns motivos:
 
-Sendo mortes a variável que mais responde contemporaneamente às outras, é necessário decidir a ordem entre casos e vacinas. O modelo SIR é consistente com a interpretação de que a pandemia ``surge'' após um choque exógeno na variável de casos, motivando casos como a menos correlacionada contemporaneamente, que é a interpretação principal desta tese. Uma possível limitação da identificação vem do fato de que boa parte da provisão de vacinas depende de choques exógenos na criação e produção das vacinas, balanço do governo, e motivações políticas -- como mostra a própria experiência brasileira da disputa política entre o governo federal e estaduais para vacinar a população. Ainda assim, parte da oferta, e principalmente da demanda por vacinas, parece responder contemporaneamente à intensidade da pandemia (pessoas indiferentes escolhem se vacinar após verem um número alto de casos e mortes).
+\begin{itemize}
+    \item Como dito anteriormente, a escolha do distanciamento muda, embora essa dinâmica está parcialmente inclusa no modelo;
+    \item Adicionalmente, o nível de imunização natural se altera com o passar do tempo, mas na data da primeira vacina, apenas $4,08$\% da população havia se recuperado da doença, que em comparação aos $85,05$\% vacinados, indica pouca relevância desse viés;
+    \item Por fim, tanto as mutações do COVID-19, quanto as diferentes marcas de vacinas podem atrapalhar a análise, uma vez que a eficácia da vacinação varia muito a depender dessas características. Ainda assim, o efeito geral/médio deve-se manter pouco alterado\footnote{Adicionar dados relacionado a tais variáveis pode ser uma futura expansão para o modelo.}.
+\end{itemize}
+
+
+\subsection{Identificação}
+
+Uma das principais limitações do SVAR é a necessidade de fazer uma hipótese apriorística de identificação sobre a relação contemporânea dos choques de cada variável. A literatura SIR apresenta argumentos para uma identificação por decomposição de Cholesky\footnote{Que consiste em assumir diferentes ordenamentos de relações contemporâneas entre as variáveis} na ordem de casos-vacinas-mortes. 
+
+Mortes é a variável que mais responde às outras. Uma maior incidência de casos aumenta diretamente a probabilidade das mortes, inclusive através da pior provisão de serviços públicos de saúde. As evidências laboratoriais reforçam essa visão
+
+Falta estudar ordem entre casos e vacinas. O modelo SIR é consistente com a interpretação de que a pandemia ``surge'' após um choque exógeno na variável de casos, motivando casos como a menos correlacionada contemporaneamente, que é a interpretação principal desta tese. Uma possível limitação da identificação vem do fato de que boa parte da provisão de vacinas depende de choques exógenos na criação e produção das vacinas, balanço do governo, e motivações políticas -- como mostra a própria experiência brasileira da disputa política entre o governo federal e estaduais para vacinar a população. Ainda assim, parte da oferta, e principalmente da demanda por vacinas, parece responder contemporaneamente à intensidade da pandemia (pessoas indiferentes escolhem se vacinar após verem um número alto de casos e mortes).
+
+A literatura de SVAR contém várias maneiras diferentes de explorar as relações teóricas entre as variáveis para criar hipóteses críveis, como identificações por efeitos de curto e longo prazos, e restrições de sinais. Não foi possível identificar nenhum paralelo entre a teoria epidemiológica e as possíveis identificações mais rebuscadas, abrindo espaço para futuras melhorias deste trabalho. 
+
+
 
 \let\clearpage\relax
 \chapter{Dados}
-\section{Fontes e Correções}
+
+\section{Fontes}
+
 O modelo SVAR somente necessita das variáveis de casos, mortes, e vacinas, uma vez que suscetíveis e recuperados são combinações lineares das três primeiras\footnote{Inclusive, sua inclusão geraria problemas de multicolinearidade}. A fonte dessas variáveis foi repositório de dados da organização \textit{Our World in Data} (\textcite{Owid}) que apresenta dados diários. Para o Brasil, a organização captou os dados através do Ministério da Saúde, e da Universidade Federal de Viçosa.
 
-A janela de dados vai de 02/03/2020 à 18/09/2022, totalizando 912 dias. Os dados foram agregados em semanas (somando os valores de todos os dias da semana), por três motivos principais: (i) as limitações sobre o \textit{timing} da captura dos dados, como será discutido mais a frente, afeta muito a utilidade de dados diários; (ii) a ``periodicidade'' do covid se assemelha à ciclos semanais, o período de maior chance de contágio seria aproximadamente 7 dias, e o período para eliminar o vírus do corpo pós sintomas seria aprox. 14 dias; e (iii) o VAR com dados semanais conseguiu ser muito mais parcimonioso, com bem menos lags, e conseguindo capturar a dinâmica das variáveis tão bem quanto o VAR diário.
+A janela de dados vai de 02/03/2020 à 20/03/2023, totalizando $1113$ dias. Os dados foram agregados em semanas (somando os valores de todos os dias da semana), por três motivos principais: (i) as limitações sobre o \textit{timing} da captura dos dados, como será discutido mais a frente, afeta muito a utilidade de dados diários; (ii) a ``periodicidade'' do covid se assemelha à ciclos semanais, o período de maior chance de contágio seria aproximadamente $7$ dias, e o período para eliminar o vírus do corpo pós sintomas seria aprox. $14$ dias; e (iii) o VAR com dados semanais conseguiu ser muito mais parcimonioso, com bem menos lags, e conseguindo capturar a dinâmica das variáveis tão bem quanto o VAR diário.
 
-Aplicando essa transformação, os 912 dias se tornam 134 semanas. Como será descrito na seção do modelo econométrico (\ref{sec:model}), serão feitos modelos antes e depois da primeira aplicação de vacina no Brasil, que entrou na base de dados no dia 27/01/2021. Portanto, os modelos pré vacinas foram feitos com 46 observações, e os pós vacinas, com 88 observações.
+Aplicando essa transformação, os 1113 dias se tornam $161$ semanas. Como será descrito na seção do modelo econométrico (\ref{sec:model}), serão feitos modelos antes e depois da primeira aplicação de vacina no Brasil, que entrou na base de dados no dia 27/01/2021. Portanto, os modelos pré vacinas foram feitos com $48$ observações, e os pós vacinas, com $113$ observações.
 
-Em casos raros, as fontes de dados da base OWiD apresentava valores negativos por causa de alguma correção interna. Isso ocorreu em 4 dias, normalmente na variáveis de casos. Nesses casos, os valores foram aproximados usando a média das seis observações vizinhas, antes de agregar o dado semanalmente.
 
-A qualidade das variáveis é uma limitação comum dos trabalhos sobre COVID, e este não é exceção. Boa parte das pessoas que pegam a doença não se testam, seja porque não apresentaram sintomas, porque não se preocuparam, ou porque não puderam arcar com o valor do teste, gerando muita subnotificação na variável. Além disso, idealmente queríamos que a variável de ``novos casos'' indicasse o dia da infecção, mas na realidade, um indivíduo infectado somente entra para a amostra após desenvolver os sintomas, se testar, e entrar para a base de dados do Ministério da Saúde. Vale notar que o SVAR ajuda a lidar com isso ao incluir vários \textit{lags} das variáveis e gerar uma IRF, sem depender tanto da interpretação de um \textit{lag} específico. Por fim, os testes do COVID costumam gerar falsos positivos e falsos negativos, também diminuindo a qualidade dessa variável. Além disso, os dados diários apresentam recorrentes correções nos finais/inícios de semanas, de modo que é necessário fazer uma suavização de média móvel de 7 dias. Por esse conjunto de problemas, a informação extra que dados diários trazem não é suficiente para justificar forte perda de performance gerada para a modelagem VAR.
+\section{Limitações}
+
+Em $4$ observaçÕes as variáveis apresentavam valores negativos por causa de correções do ministério. Nesses casos, os valores foram aproximados usando a média das seis observações vizinhas, antes de agregar o dado semanalmente.
+
+A qualidade das variáveis é uma limitação comum dos trabalhos sobre COVID, e este não é exceção. Boa parte das pessoas que pegam a doença não se testam, seja porque não apresentaram sintomas, porque não se preocuparam, ou porque não puderam arcar com o valor do teste, gerando muita subnotificação na variável. Além disso, idealmente queríamos que a variável de ``novos casos'' indicasse o dia da infecção, mas na realidade, um indivíduo infectado somente entra para a amostra após desenvolver os sintomas, se testar, e entrar para a base de dados do Ministério da Saúde. Vale notar que o SVAR ajuda a lidar com isso ao incluir vários \textit{lags} das variáveis e gerar uma IRF, sem depender tanto da interpretação de um \textit{lag} específico. Por fim, os testes do COVID costumam gerar falsos positivos e falsos negativos, também diminuindo a qualidade dessa variável. Além disso, os dados diários apresentam recorrentes correções nos finais/inícios de semanas, de modo que é necessário fazer uma suavização de média móvel de $7$ dias. Por esse conjunto de problemas, a informação extra que dados diários trazem não é suficiente para justificar forte perda de performance gerada para a modelagem VAR.
 
 O número de mortes sofre de todos esses problemas, mas em menor intensidade: a maior parte das mortes por COVID são (corretamente) identificadas e incluídas na base, com um \textit{delay} menor que Casos. Essas limitações comprometem a interpretação estimação do SVAR, principalmente no que tange aos resultados referentes à casos, assim como indica \textcite{Escobar2019}, de modo que nossos resultados principais são aqueles relacionados à variável de mortes.
 
-A base de dados desagregava a vacinação entre 1$^\text{as}$, 2$^\text{as}$ e 3$^\text{as}$ doses aplicadas, e se fosse possível identificar o choque de vacinas, seria interessante ver como os choques nas diferentes vacinas afetam casos e mortes. Como não é o caso, incluir múltiplas equações de vacinas gera problemas de dimensionalidade no VAR, sem trazer real benefício.
+No que tange o distanciamento, os dados disponíveis, são de \textit{surveys} de preenchimento voluntário e individual (sem um entrevistador), que podem apresentar dados viesados, não representativos, e disponíveis para uma janela bem pequena. Desse modo, nenhuma variável desse tema foi incluída. Vale lembrar que parte da dinâmica do distanciamento é explicada pelas próprias variáveis do sistema.
+
+Uma possível expansão seria desagregar a variável de vacinas entre 1$^\text{as}$, 2$^\text{as}$ e 3$^\text{as}$ doses aplicadas, mas com a fraca especificação do choque, só estaríamos gerando problemas de dimensionalidade no VAR, sem trazer real benefício.
 
 
-\section{Estatísticas descritivas}\label{sec:stat}
-A figura \ref{fig:histval}\footnote{Embora para o VAR seja melhor utilizar dados semanais, as estatísticas dessa seção foram calculadas nos valores diários para melhor visualização.} mostra como as variáveis de interesse progrediram no tempo. A primeira e segunda onda do COVID no Brasil foram definidas como, respectivamente, os intervalos em verde e laranja. Vemos que a mortalidade na primeira onda, onde a vacinação ainda estava começando, foi muito mais alta do que na segunda, já indicando um possível efeito da vacina. Adicionalmente, podemos ver que o \textit{timing} das ondas não parece ser explicado apenas pelas três variáveis, e, de encontro com o descrito no modelo SIRDV, trabalhos como \textcite{Moraes2021} indicam que o relaxamento do distanciamento social é uma das causas de tais ondas, e portanto precisa ser incluído no modelo.
+\section{Estatísticas Descritivas}\label{sec:stat}
+
+A figura \ref{fig:histval} mostra como as variáveis de interesse progrediram no tempo. Foram marcadas algumas ``ondas'' de casos e mortes. É especialmente interessante notar a diferença na proporção casos$/$mortes entre a primeira e segunda onda.
+
+Podemos ver que o \textit{timing} das ondas não parece ser explicado apenas pelas três variáveis, e, de encontro com o descrito no modelo SIRDV, trabalhos como \textcite{Moraes2021} indicam que o relaxamento do distanciamento social é uma de suas causas. Como não temos dados de distanciamento, foram incluídas tendências determinísticas quadráticas no modelo SVAR, com o intuíto de ajudar no controle desses \textit{drivers} exógenos das ondas.
 
 \begin{figure}[H]
     \centering
-    \caption{Valores Históricos das séries}
-    \includegraphics[]{Figuras/histval.png} %width = 0.84\textwidth
+    \caption{Valores históricos das séries}
+    \includegraphics[width = 0.95\textwidth]{Figuras/stat_historic.png}
     \label{fig:histval}
 \end{figure}
 
-Porém, os dados de distanciamento disponíveis para o Brasil, porém, são de \textit{surveys} de preenchimento voluntário e individual (sem um entrevistador), que podem apresentar dados viesados, não representam a população brasileira como um todo, e estão disponíveis para uma janela de dados bem pequena. A falta desses dados afeta principalmente o método da IRF de vacinas em casos/mortes, já que o viés de variável omitida dificulta a interpretação causal dessa função. Como explicado na seção anterior, parte da dinâmica do distanciamento é explicada pelas próprias variáveis do sistema, de modo que a falta dos dados não prejudica os resultados tão intensamente.
-
-A figura \ref{fig:acfall} apresenta as autocorrelações (padrões, parciais, e cruzadas) das séries. As variáveis têm muitos \textit{lags} significativos em suas ACF's, e apenas o primeiro em suas PACF's, indicando que os processos são auto-regresivos e médias-móveis. Vemos que a dependência do passado começa positiva, mas em \textit{lags} da casa das centenas o efeito se reverte. Além disso, casos parecem depender de seu passado mais fracamente que casos e vacinas.
-
-As CCF's mostram resultados intuitivos: \textit{lags} de casos estão correlacionados positivamente com mortes, e o contrário não é tão significativo; \textit{Lags} de vacinas estão correlacionados negativamente com casos e mortes (em um primeiro momento), algo provavelmente relacionado efeitos da vacina; E o número de vacinas aplicadas parece se relacionar positivamente ao número passado de casos e mortes, algo passível de ser interpretado como a resposta de produtores, governos, e ``tomadores de vacinas'' à um aumento de casos.
+A figura \ref{fig:acfall} apresenta as autocorrelações (padrões, parciais, e cruzadas) das séries. As variáveis têm muitos \textit{lags} significativos em suas ACF's, e apenas os primeiros em suas PACF's. Alguns fatos interessantes: casos tem a maior auto dependência; vacinas tem maior relação com mortes do que com casos -- algo possivelmente relacionado com a ``preferência'' do governo, produtores, e ``tomadores de vacinas''; as outras variáveis não apresentam correlação negativa com vacinas.
 
 \begin{figure}[H]
     \centering
-    \caption{Autocorrelações das séries}
-    \includegraphics[width = 0.84\textwidth]{Figuras/acfall.png}
+    \caption{Correlação cruzada e parcial das séries}
+    \includegraphics[width = 0.95\textwidth]{Figuras/stat_acf.png}
     \label{fig:acfall}
 \end{figure}
 
-Uma análise das correlações cruzadas antes e depois da vacinação já indica o possível efeito dessa variável, a correlação entre \textit{lags} de casos e mortes é maior no período pré vacina, como mostra a figura \ref{fig:ccfad}, indicando um aumento na resistência contra a doença na população pós vacina. Essa diferença é ainda maior no cenário da política de vacinação mais avançada como, por exemplo, 3 meses pós vacina.
+Essa última constatação é contraintuitiva, e pode indicar como pode ser limitado medir o efeito direto da vacinação. Em oposição o efeito da vacina na relação das variáveis tem um resultado inicial interessante, exposto na figura \ref{fig:ccfad}. Uma análise das correlações cruzadas antes e depois da vacinação mostram uma maior relação entre \textit{lags} de casos e mortes no período pré vacina, possivelmente indicando um aumento na resistência contra a doença na população pós vacina. Essa diferença é ainda maior no cenário da política de vacinação mais avançada como, por exemplo, $10$ meses pós vacina.
 
 \begin{figure}[H]
     \centering
-    \caption{CCF's de casos e mortes, antes e depois da vacina}
-    \includegraphics[]{Figuras/ccfad.png} %width = 0.84\textwidth
+    \caption{Correlação mortes-casos pré e pós vacinas}
+    \includegraphics[width = 0.95\textwidth]{Figuras/stat_ba.png}
     \label{fig:ccfad}
 \end{figure}
+
+Por fim, no que tange a sazonalidade do COVID-19, a literatura é inconclusiva (\cite{Byun2021}). Alguns estudos atestam relação com a temperatura ao longo do ano (\cite{Wiemken2023}), porém, essa relação não pareceu estar tão significativa nos dados disponíveis, e gerou pouco efeito no modelo econométrico. Outras especificações de sazonalidade foram testadas, mas ao fim, nenhum tipo de correção pareceu necessária.
 
 
 
 \let\clearpage\relax
 \chapter{Modelo Econométrico}\label{sec:model}
 
-Para realizar as três abordagens diferentes citadas na seção do modelo teórico, foram estimados dois VAR's:
+Para realizar as três abordagens diferentes citadas na seção do modelo teórico, foram estimados os modelos \eqref{eq:var1} a \eqref{eq:var3}:
 
 \begin{align}
 &\begin{bmatrix}
 I_t \\ D_t
 \end{bmatrix}
-= \alpha_0^1 + \sum_{j=1}^{J^1}\pmb{\phi}_j^1
+= \alpha_0^{(1)} + \sum_{j=1}^{p^{(1)}}\pmb{\phi}_j^{(1)}
 \begin{bmatrix}
 I_{t-j} \\ D_{t-j}
 \end{bmatrix}
-+ \pmb{\alpha}^1_1m\hat{e}s_t + \pmb{\alpha}^1_2onda_t + \pmb{\varepsilon}_{t}^1, \;\; t \in \{0, 1, ..., t_v\} \label{eq:var1}\\
++ \pmb{\alpha}^{(1)}_1onda_t + \pmb{\alpha}^{(1)}_2onda_t^2 + \pmb{\varepsilon}_{t}^{(1)}, \;\; t \in \{1, 2, ..., t_v\} \label{eq:var1}\\
 &\text{Modelo (1) estimado na amostra } t \in \{t_v, t_v+1, ..., t_f\}\label{eq:var2}\\
 &\begin{bmatrix}
 I_t \\ V_t \\ D_t
 \end{bmatrix}
-= \alpha_0^3 + \sum_{j=1}^{J^2}\pmb{\phi}_j^3
+= \alpha_0^{(3)} + \sum_{j=1}^{p^2}\pmb{\phi}_j^{(3)}
 \begin{bmatrix}
 I_{t-j} \\ V_{t-j} \\ D_{t-j}
 \end{bmatrix}
-+ \pmb{\alpha}^3_1m\hat{e}s_t + \pmb{\alpha}^3_2onda_t + \pmb{\varepsilon}_{t}^3, \;\; t \in \{t_v, t_v+1, ..., t_f\}\label{eq:var3}
++ \pmb{\alpha}^{(3)}_1onda_t + \pmb{\alpha}^{(3)}_2onda_t^2 + \pmb{\varepsilon}_{t}^{(3)}, \;\; t \in \{t_v, t_v+1, ..., t_f\}\label{eq:var3}\\
+&\text{Modelo (1) estimado na amostra } t \in \{t_v+g, t_v+g+1, ..., t_f\}\label{eq:var4}\\
+&\text{Modelo (3) estimado na amostra } t \in \{t_v+g, t_v+g+1, ..., t_f\}\label{eq:var5}
 \end{align}
 
-\noindent Onde $t_v$ é a data da primeira vacina e $t_f$ é a última data na base de dados. $V_t$ é o número de vacinas aplicadas no período $t$, $I_t$ é o número de casos registrados no período, e  $D_t$ é o número de mortes registrados no período. $onda_t$ é um vetor de \textit{dummies} de primeira e segunda onda (como definidas pela figura \ref{fig:histval}), e $m\hat{e}s_t$ é um vetor de \textit{dummies} de mês do ano.
+\noindent Onde $t_v$ é a data da primeira vacina e $t_f$ é a última data na base de dados. $V_t$ é o número de vacinas aplicadas no período $t$, $I_t$ é o número de casos registrados no período, e  $D_t$ é o número de mortes registrados no período. $onda_t$ é um vetor com um índice de tempo para cada onda (como definidas pela figura \ref{fig:histval}).
 
 O modelo \eqref{eq:var1} é o modelo pré vacinação, \eqref{eq:var3} o modelo pós vacinação, e \eqref{eq:var2} um modelo ``intermediário''. Ele já apresenta a nova dinâmica entre casos e mortes pós vacinas, mas não leva em conta o efeito ``indireto" dessas variáveis com vacinas, por isso, a princípio, deve apresentar os efeitos positivos da vacinação, mas em menor intensidade do que o segundo \eqref{eq:var3}.
 
-As \textit{dummies} de sazonalidade foram incluídas para capturar efeitos associados aos meses como variações de temperatura\footnote{\cite{Qi2020} mostra uma relação entre temperatura e umidade na transmissão do COVID-19 na China.}, e relaxamento do distanciamento social durante meio e fim de ano. Foram testadas outras \textit{dummies}, como mês e ano (mar. de 2020 a set. de 2022), semana no ano (de 0 a 52), e ordem da semana no mês (1 a 4). Porém nenhuma delas gerou grandes mudanças na captura da dinâmica das variáveis, e portanto, foi escolhido o modelo mais parsimonioso.
+Os modelos \eqref{eq:var4} e \eqref{eq:var5} foram estimados considerando um ``\textit{gap}'' na amostra, para melhor separá-los do período pré vacinação. O \textit{gap} escolhido foi o menor que gerou uma diferença expressiva, $g = 10$ semanas.
 
-A seleção do número de \textit{lags} $J$ para cada modelo, foi feita com base no critério Akaike. Do primeiro ao último, o \textit{lag} escolhido foi $J^1 = 1$, $J^2=2$, e $J^3=3$. Todos os modelos foram estimados por MQO equação-a-equação. Os diagnósticos dos três modelos são similares, e os testes para o modelo \eqref{eq:var3} são apresentados no apêndice \ref{ap:diag}.
+A seleção do número de \textit{lags} $p$ para cada modelo, foi feita com base nos critérios de informação, e nos diagnósticos pós estimação. O modelo \eqref{eq:var1} teve $p = 1$, o resto $p = 2$. Todos os modelos foram estimados por MQO equação-a-equação. Os diagnósticos dos três modelos são similares, e os testes para o modelo \eqref{eq:var5} são apresentados no apêndice \ref{ap:diag}.
 
-Em seguida os efeitos contemporâneos entre as variáveis foram modelados utilizando a decomposição de Cholesky. Foi feita a decomposição na ordem casos-vacinas-mortes, gerando a seguinte matrizes de relações contemporâneas:
+Em seguida os efeitos contemporâneos entre as variáveis foram modelados utilizando a decomposição de Cholesky, estimando os modelos estruturais. Foi feita a decomposição na ordem casos-vacinas-mortes, gerando a seguinte matrizes de relações contemporâneas:
 
 \begin{equation}\label{eq:svar}
     \begin{bmatrix}
@@ -510,264 +539,238 @@ Em seguida os efeitos contemporâneos entre as variáveis foram modelados utiliz
     \end{bmatrix}
 \end{equation}
 
+Todo o trabalho computacional foi realizado utilizando o \textit{software} R com os pacotes \textit{vars}, \textit{svars}, e \textit{varutils}. O repositório de github com o código outras informações pode ser encontrado \href{https://github.com/ricardo-semiao/covid-svardiff}{neste link}.
 
-Todo o trabalho computacional foi realizado utilizando o \textit{software} R e o pacote \textit{vars}\footnote{O repositório de github com o código outras informações pode ser encontrado \href{https://github.com/ricardo-semiao/TCC-Graduacao}{neste link}.}.
+
 
 \let\clearpage\relax
 \chapter{Resultados e discussão}
 
-A seção \ref{sec:res1} calcula as IRF's dos três modelos VAR, utilizando a decomposição em \eqref{eq:svar}, mostrando como a inclusão de vacinas afeta as funções. A seção \ref{sec:res2} constrói contrafactuais da não existência de vacinas com vários métodos diferentes, obtendo estimativas do efeito total da política de vacinação.
+A seção \ref{sec:res1} calcula as IRF's dos cinco modelos VAR, utilizando os modelos SVAR, mostrando como a inclusão de vacinas afeta as funções. A seção \ref{sec:res2} constrói contrafactuais da não existência de vacinas com vários métodos diferentes, utilizando os modelos VAR, obtendo estimativas do efeito total da política de vacinação. O apdêndice \ref{ap:single} mostra a análise não prioritária das IRF's do modelo (SVAR) \eqref{eq:var5}.
 
-Antes de apresentar os resultados principais, vale a pena mostrar como correlação entre $\hat{\varepsilon}^i_{Casos}$ e $\hat{\varepsilon}^i_{Mortes}$\footnote{$\hat{\varepsilon}^i$ indica vetor de resíduos do modelo (i).} diminuiu após o início da vacinação. Nos três modelos VAR, respectivamente: $\mathbb{COR}(\hat{\varepsilon}^i_{Mortes}, \hat{\varepsilon}^i_{Casos}) = 0,908$, $0,405$, e $0,373$. Esse fato é uma evidência preliminar sobre como a vacina imunizou a população a um choque de casos.
+Antes de apresentar os resultados principais, vale a pena mostrar como correlação entre $\hat{\varepsilon}^i_{Casos}$ e $\hat{\varepsilon}^i_{Mortes}$\footnote{$\hat{\varepsilon}^i$ indica vetor de resíduos do modelo (i).} diminuiu após o início da vacinação. Nos três modelos VAR, respectivamente: $\mathbb{COR}(\hat{\varepsilon}^i_{Mortes}, \hat{\varepsilon}^i_{Casos}) = 0,91$, $0,46$, $0,48$, $0,30$, e $0,30$. Esse fato é uma evidência preliminar sobre como a vacina alterou a relação entre os choques das variáveis.
 
-\section{Resposta de Mortes à Casos antes e Depois da Vacinação}\label{sec:res1}
-O resultado principal deste trabalho é mostrar a diferença do impacto de um choque de casos pré e pós vacinação, algo que fica claro na figura \ref{fig:IRF BaA}, que mostra a resposta de mortes após um choque de 1000 casos\footnote{Intervalos de confiança de 90\%, calculados por \textit{bootstrap}.}, para o SVAR identificado na ordem casos-vacinas-mortes.
+
+\section{Resposta de Mortes à Casos Pré e Pós Vacinação}\label{sec:res1}
+
+O resultado principal deste trabalho é mostrar a diferença do impacto de um choque de casos pré e pós vacinação, algo que fica claro na figura \ref{fig:IRF BaA}, que mostra a função de resposta (em mortes) ao impulso (de $1000$ casos), para os cinco modelos\footnote{Intervalos de confiança não foram calculados por imprecisões nos pacotes disponíveis no R.}.
 
 \begin{figure}[H]
     \centering
-    \caption{IRF's de Casos em Mortes Antes e Depois da Vacinação}
-    \includegraphics[width = 0.95\textwidth]{Figuras/IRF BaA CVM.png}
+    \caption{IRF casos em mortes - modelos (1) a (5)}
+    \includegraphics[width = 0.95\textwidth]{Figuras/res1_irfs.png}
     \label{fig:IRF BaA}
 \end{figure}
 
-Antes da vacinação, um choque de $1000$ casos gerava $8,71$ mortes na primeira semana, e depois se estabilizava em torno do 0 a partir da segunda/terceira semana. Depois da vacinação, o modelo sem vacinas apresenta uma resposta de $1,33$ mortes na primeira semana, e também se estabiliza para valores insignificantes em seguida (por mais que a estabilização demora mais). No modelo \eqref{eq:var3}, que leva em conta o efeito que casos e mortes tem na provisão de vacinas, a IRF fica ainda menor, apresentando um pico de $1,28$ mortes. Esses resultados podem ser vistos na tabela \ref{tb:irfpico}.
+Antes da vacinação, um choque de $1000$ casos gerava $4,13$ mortes na primeira semana. Após a vacina, os modelos sem \textit{gap} indicam um primeiro choque em torno de $1,5$, e os com, um choque próximo de $0,64$.
 
-\begin{table}[H]
-\centering
-\caption{Variações no Pico das IRF's}
-\label{tb:irfpico}
-\begin{tabular}{ccccc}
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
-Modelo & Estimativa & IC (95\%) & IC (90\%) & IC (68\%) \\\hline\\[-1.8ex]
-\multicolumn{1}{c|}{\eqref{eq:var1}}                   & 8.71 & 2.21 a 10.35 & 3.14 a 10.69 & 3.83 a 9.05 \\ 
-\multicolumn{1}{c|}{\eqref{eq:var2}}                   & 1.33 & 0.16 a 1.86 & 0.13  a 1.79 & 0.07  a 1.47 \\ 
-\multicolumn{1}{c|}{\eqref{eq:var3}}                   & 1.28 & 0.11 a 1.74 & 0.09  a 1.78 & 0.16  a 1.8 \\ 
-\multicolumn{1}{c|}{}                                  &  &  &  &  \\ 
-\multicolumn{1}{c|}{\eqref{eq:var1} - \eqref{eq:var3}} & 7.43 & 0.47 a 10.24 & 1.36 a 10.6 & 2.03 a 8.89 \\ 
-\multicolumn{1}{c|}{Proporção}                         & 85\% & 21\% a 99\% & 43\%  a 99\% & 53\%  a 98\% \\ 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
-\end{tabular}
-\end{table}
+Só o pico não passa toda a mudança de dinâmica, a vacinação pode afetar também a trajetória das funções: existem os efeitos sobre a confiança e distanciamento; o tempo de cama antes do falecimento pode aumentar; além de possivelmente afetar a própria taxa de mortalidade.
 
-Só o pico não passa toda a mudança de dinâmica, a vacinação pode afetar também a trajetória das funções. A vacinação pode fazer com que o tempo de cama antes do falecimento aumente, ``atrasando'' a resposta. Além disso, a vacinação pode deixar a população mais confiante, diminuindo a resposta no distanciamento dado um choque de casos. Por outro lado, mesmo com menos distanciamento, a menor taxa de mortalidade reduz o aumento de mortes dado um menor distanciamento. Em suma, não é óbvio se a trajetória da IRF muda, ou se se mantém similar, apenas em menor escala.
+Por esse motivo, vale também analisar as mudanças nas somas dos valores das funções (tabela \ref{tb:irfsoma}). A soma da resposta à $1000$ casos é de $16,91$ mortes, reduzindo para $7,99$ no modelo intermediário, e $6,67$ no último modelo (ambos com \textit{gap}), representando uma diminuição na resposta de $10,24$ mortes (ou 40\%).
 
-Por esse motivo, vale também analisar as mudanças nas somas dos valores das funções (tabela \ref{tb:irfsoma}). A soma da resposta à $1000$ casos é de $22,62$ mortes, reduzindo para $5.04$ no modelo intermediário, e $4,41$ no último modelo, representando uma diminuição na resposta de $18,21$ mortes (ou 81\%). Em proporção, os valores são similares.
+Os modelos sem \textit{gap} mostram um aumento grande nas respostas, totalizando, contraintuitivamente, um maior número de mortes. Esse resultado deve estar relacionado à má separação dos momentos pré e pós desses modelos, indicando a superioridade dos modelos com \textit{gap}.
 
 \begin{table}[H]
 \centering
 \caption{Variações na Soma das IRF's}
 \label{tb:irfsoma}
-\begin{tabular}{ccccc}
+\begin{tabular}{cccc}
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
-Modelo & Estimativa & IC (95\%) & IC (90\%) & IC (68\%) \\\hline\\[-1.8ex]
-\multicolumn{1}{c|}{\eqref{eq:var1}}                    & 22.62 & 3.22 a 28.73 & 3.35 a 24.68 & 5.57 a 20.74 \\ 
-\multicolumn{1}{c|}{\eqref{eq:var2}}                    & 5.04 & 1.34  a 8.28 & 0.97  a 7.21 & 2.31  a 5.96 \\ 
-\multicolumn{1}{c|}{\eqref{eq:var3}}                    & 4.41 & 0.81  a 7.76 & 1.02  a 8.19 & 1.3   a 7.71 \\ 
-\multicolumn{1}{c|}{}                                   &  &  &  &  \\ 
-\multicolumn{1}{c|}{\eqref{eq:var1} - \eqref{eq:var3}}  & 18.21 & -4.54 a 27.92 & -4.84 a 23.66 & -2.14 a 19.44 \\ 
-\multicolumn{1}{c|}{Proporção}                          & 81\% & -141\% a 97\% & -144\% a 96\% & -38\% - 94\% \\ 
+Modelo & Estimativa & (1) - (i) & \%\\\hline\\[-1.8ex]
+\multicolumn{1}{c|}{\eqref{eq:var1}}    & 16,91  & 0     & 100\%\\ 
+\multicolumn{1}{c|}{\eqref{eq:var2}}    & 27,81  & $<0$    & $<0$   \\ 
+\multicolumn{1}{c|}{\eqref{eq:var3}}    & 26,91  & $<0$    & $<0$   \\
+\multicolumn{1}{c|}{\eqref{eq:var4}}    & 7,99   & 8,92  & 53\% \\
+\multicolumn{1}{c|}{\eqref{eq:var5}}    & 6,67   & 10,24 & 60\% \\
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
 \end{tabular}
 \end{table}
 
-Por último, note que estamos interpretando a IRF sem vacina como um contrafactual da ``IRF no período pós vacinas, mas no mundo onde a vacinação não ocorreu''\footnote{A princípio essa interpretação faz sentido, como discutido no final da seção \ref{sec:teorico2}}. Com isso em mente, podemos extrapolar os resultados dessa seção, e multiplicar a soma da IRF pós vacinas pelo total de casos (dividido por mil, uma vez que essa era o tamanho do choque). Os resultados desse método são apresentados no fim da seção seguinte.
+É importante lembrar que as IRF's analisadas são aproximações lineares das respostas durante o período analisado, sem permitir variações nessas funções com base nos níveis das outras variáveis, algo que o modelo SIRDV assumia ser importante. Se, por exemplo, a resposta à vacinas cai muito conforme o número de imunizados sobe, essa metodologia deve apresentar um resultado muito superestimado.
 
-Na hora de interpretar os resultados dessa metodologia, é importante ter em mente que as IRF's analisadas são uma aproximação linear das respostas durante o período analisado, sem permitir variações nessas funções com base nos níveis das outras variáveis, algo que o modelo SIRDV assumia ser importante. Se, por exemplo, a resposta à vacinas cai muito conforme o número de imunizados sobe, essa metodologia deve apresentar um resultado muito superestimado.
+Por último, note que estamos interpretando a IRF sem vacina como um contrafactual da ``IRF no período pós vacinas, mas no mundo onde a vacinação não ocorreu''\footnote{A princípio essa interpretação faz sentido, como discutido no final da seção \ref{sec:teorico2}}. Com isso em mente, podemos extrapolar os resultados dessa seção, e multiplicar a IRF sem vacinas pelo total de casos\footnote{Dividido por mil, uma vez que essa era o tamanho do choque.}. Os resultados desse método são apresentados no fim da seção seguinte.
 
 
 \section{Análise de Contrafactual}\label{sec:res2}
-Para ter uma medida do efeito total da política de vacinação, é possível construir um contrafactual onde nunca houve a vacinação, e comparar com os casos e mortes observados. Para isso, foram elencados alguns métodos diferentes: (i) utilizar o modelo \eqref{eq:var1} para ``prever'' o período pós vacinas; (ii) utilizar o modelo \eqref{eq:var3} e calcular a série de casos e mortes, dado o ponto inicial pré vacinas, e forçando a equação de vacinas a ser zero (zerando também a influência dela sobre casos e mortes); (iii) e (iv) envolvem as mesmas duas abordagens anteriores, mas em vez de calcular a variável de casos com o modelo, utilizar a variável de casos observada para calcular um contrafactual apenas para mortes.
 
+Para ter uma medida do efeito total da política de vacinação, é possível construir um contrafactual onde nunca houve a vacinação, e comparar com os casos e mortes observados. Para isso, foram elencados alguns métodos diferentes: (i) utilizar o modelo \eqref{eq:var1} para ``prever'' o período pós vacinas; (ii) utilizar o modelo \eqref{eq:var5}\footnote{Os resultados utilizando o modelo \eqref{eq:var3} são similares} para ``prever'' a série de casos e mortes (a partir do ponto pré vacinas), mas zerando o efeito das vacinas; (iii) usar o contrafatual de casos como ``choque total'' e multiplicar pela IRF sem vacinas da seção anterior. (i*), (ii*), e (iii*) envolvem as mesmas duas abordagens anteriores, mas em vez de calcular a variável de casos com o modelo, utilizar a variável de casos observada para calcular um contrafactual apenas para mortes.
 
-Os contrafactuais de cada abordagem são ligeiramente diferentes: (iii) e (iv) estimam ``qual seria o número de mortes no 'mundo' sem vacinas, mas onde os casos se mantiveram iguais?''; enquanto (i) e (ii) estimam ``qual seria o número de mortes no mundo sem vacinas, dado que a falta de vacinas (possivelmente) também afetaria o número de casos''. Embora a abordagem (i) e (ii) parece ser o contrafactual mais ``completo'', não isolam o efeito da redução de mortalidade. Como o efeito da vacina na taxa de infecção e número de casos não é tão claro, os contrafactuais (i) e (ii) são de mais difícil interpretação. Nesse sentido, (iii) parece ser o modelo mais promissor.
+Alguns comentários sobre cada abordagem:
 
-As abordagens (ii) e (iv) incluem a mudança da relação entre casos e mortes pós vacinas, em sua estimação, apenas ``zerando'' o efeito direto da vacina, portanto devem apresentar um contrafactual mais conservador. Ao mesmo tempo, devem ser mais precisos, uma vez que, o modelo \eqref{eq:var3} foi estimado com o dobro de observações do \eqref{eq:var1}. Lembrando que todas as \textit{dummies} de mês e onda foram utilizadas nas ``previsões''.
+\begin{itemize}
+    \item Os contrafactuais são diferentes:
+    \begin{itemize}
+    \item (i*) a (iii*) estimam ``qual seria o número de mortes no 'mundo' sem vacinas, mas onde os casos se mantiveram iguais?'';
+    \item (i) a (iii) estimam ``qual seria o número de mortes no mundo sem vacinas, dado que a falta de vacinas também afeta o número de casos?'';
+\end{itemize}
+    \item (i) a (iii) são mais ``completos'' mas dependem da problemática interpretação da variável de casos. (i*) a (iii*) são mais ``conservadores'', mas mais precisos.
+    \item (i*) a (iii*) também são mais conservadores por já carregar a mudança na relação entre as variáveis em seus coeficientes;
+    \item (i) e (i*) foram estimados com metade das observações de (ii) e (ii*). Adicionalmente, (i) não tem muita informação para ``prever'' trajetórias, e deve ser um método ainda mais errático;
+    \item (iii) e (iii*) são métodos menos tradicionais, extrapolando os choques individuais ao nível agregado, com alto potencial de superestimação.
+    \item Por fim, todos os modelos utilizaram as tendências determinísticas. Embora no contrafactual as ondas poderiam não ter ocorrido, os métodos não tem poder para determinar isso\footnote{Adicionalmente, as ondas estão relacionadas ao surgimento de variantes, algo exógeno ao contrafactual.}.
+\end{itemize}
+
+Em suma, estamos mais interessados no método (ii*) como o mais concervador, (ii) como uma opção menos conservadora, e (iii*) como uma abordagem adicional, potencialmente superestimada.
+
+Os resultados dos métodos (i) e (ii) podem ser vistos na figura \ref{fig:counter1}. A figura apresenta o intervalo de confiança de $80$\%. Como esperado, o método (i) é bastante errático, mas o outro segue as séries realizadas com muito mais precisão.
 
 \begin{figure}[H]
     \centering
     \caption{Contrafactuais (i) e (ii)}
-    \includegraphics[width = 0.95\textwidth]{Figuras/counterfactual.png}
+    \includegraphics[width = 0.95\textwidth]{Figuras/res2_cf1-2.png}
     \label{fig:counter1}
 \end{figure}
 
-Os resultados dos métodos (i) e (ii) podem ser vistos na figura \ref{fig:counter1}. A figura apresenta o intervalo de confiança de 95\%. Como esperado, o método (ii) segue as séries realizadas com muito mais precisão, inclusive ``prevendo'' a segunda onda de casos. Porém, ambas as metodologias mostram um número reduzido de casos, o que dificulta a interpretação do efeito da redução da mortalidade.
-
-Os resultados dos métodos (iii) e (iv) podem ser vistos na figura \ref{fig:counter2}. O problema do método (ii) é intensificado com a inclusão dos casos realizados, e (iv) apresenta um contrafactual basicamente idêntico à série realizada. O método (iii) apresenta uma mortalidade bem maior na primeira onda (em comparação à (i)), mas não responde rapidamente à segunda onda de casos, gerando, novamente, um contrafactual com menos mortes.
+Os resultados dos métodos (i*) e (ii*) podem ser vistos na figura \ref{fig:counter2}. Os contrafactuais são realmente pouco disruptivos.
 
 \begin{figure}[H]
     \centering
-    \caption{Contrafactuais (iii) e (iv)}
-    \includegraphics[width = 0.95\textwidth]{Figuras/counterfactual2.png}
+    \caption{Contrafactuais (i*) e (ii*)}
+    \includegraphics[width = 0.95\textwidth]{Figuras/res2_cf4-5.png}
     \label{fig:counter2}
 \end{figure}
 
-O resultado de todos os modelos pode ser encontrado no apêndice \ref{ap:count}. Como discutido anteriormente, os métodos (ii) e (iv) retornaram um número de mortes pequeno, inclusive menor que o valor real, portanto, a análise será focada nos contrafactuais mais ``completos'' (i) e (iii).
+A construção do contrafactual multiplicando a série de casos pela IRF sem vacinas é limitada. A IRF é uma média das respostas, e na realidade, mortes não respondem sempre da mesma forma. na figura \ref{fig:counter3}, realmente vemos o descasamento das séries. Isso motiva a criação de outro \textit{baseline}, mais comparável, multiplicando a série de casos pela IRF com vacinas (modelo \eqref{eq:var5}). Embora essa comparação não seja exatamente na mesma ordem das outras abordagens, efetivamente transformamos a disparidade das IRF's em uma medida de quantidade total\footnote{Os segmentos em verde são a diferença contrafactual $-$ \textit{baseline}}.
 
-Como a comparação do pico das IRF's não levam em conta as alterações que a vacinação faz na trajetória (advindas de mudanças no distanciamento, tempo de cama, entre outros), podemos comparará-las com às IRF's soma para entender a importância relativa de cada efeito. Para serem comparáveis às metogias dessa seção, o número total de casos escolhido para multiplicar as IRF's foi o valor estimado na metodologia (i). As comparações podem ser encontradas na tabela \label{tb:counter1}. Vemos que o efeito associado à IRF pico é apenas 40\% daquele associado à IRF soma, mostrando a importância da alteração das trajetórias das IRF's que a vacina gera.
+\begin{figure}[H]
+   \centering
+   \caption{Contrafactuais (iii) e (iii*)}
+   \includegraphics[width = 0.95\textwidth]{Figuras/res2_cf3-6.png}
+   \label{fig:counter3}
+\end{figure}
+
+A tabela \ref{tb:counter} apresenta os modelos (ii), (ii*), (iii), e (iii*). Vemos que o contrafactual de casos realmente é limitado, apresentando uma banda de $30$ milhões de casos, enfraquecendo a confiança nos métodos que o utilizam. A abordagem (ii*) apresenta um resultado bastante conservador, $16$ mil ``vidas salvas''\footnote{Um valor substancialmente menor do que aquele calculado por \cite{Ferreira2021}}. Os outros métodos, por sua vez, realmente apresentaram números mais expressivos, tanto pelo uso do contrafactual de casos, quanto pela aproximação feita na IRF.
 
 \begin{table}[H] \centering 
 \renewcommand{\arraystretch}{1.2}
-  \caption{IRF Pico v.s. Soma)}\label{tb:counter1} 
+  \caption{Análise de Contrafactual}\label{tb:counter}
 \begin{tabular}{@{\extracolsep{5pt}} llccc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
 Método & Série & Diferença & Int. inferior & Int. superior \\ 
 \hline \\[-1.8ex] 
-IRF pico                   & Mortes    & 114.691       & 7.254         & 158.067 \\
-IRF soma                   & Mortes    & 281.094    & -70.080       & 430.981 \\
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
+\multirow{2}{*}{(ii)} & Casos  & 4.873.072 & -10.424.667   & 20.170.811 \\ 
+                      & Mortes & 279.473     & -159.341      & 718.288 \\ 
+(ii*)                 & Mortes & 16.024    & -422.701      & 454.750  \\ 
+(iii)                 & Mortes & 289.089    & -       & - \\
+(iii*)                & Mortes & 338.402    & -        & - \\
+\\[-1.8ex]\hline
+\hline \\[-1.8ex]
 \end{tabular} 
 \end{table} 
 
-A tabela \ref{tb:counter2} apresenta os modelos (i) e (ii) (``VAR antes'' e ``VAR antes *''), bem como a ``IRF soma'', e a IRF soma mas calculada com o valor real da variável de casos, ``IRF soma *''. Vemos que O método (i) ficou ligeiramente acima do método (iii), indicando que o efeito de vacinas em casos contribui com a redução de mortes no contrafactual. Dessa leva de métodos, (i) foi o único a retornar um contrafactual com menos mortes, e de acordo com essa metodologia, aprox. 31mil vidas foram salvas com a política de vacinação até set/2020\footnote{Um valor substancialmente menor do que aquele calculado por \cite{Ferreira2021}.}. Os métodos de IRF, geraram valores bem mais altos, possivelmente por, como discutido anteriormente, serem feitos com base em uma aproximação linear. A IRF soma calculada com os casos estimados, porém, pode ser considerada um \textit{upper bound} do efeito contrafactual.
-
-\begin{table}[H] \centering 
-\renewcommand{\arraystretch}{1.2}
-  \caption{Análise de Contrafactual}\label{tb:counter2}
-\begin{tabular}{@{\extracolsep{5pt}} llccc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
-Método & Série & Diferença & Int. inferior & Int. superior \\ 
-\hline \\[-1.8ex] 
-\multirow{2}{*}{VAR antes}  & Casos     & -8.007.319    & -17.294.129   & 2.512.505 \\ 
-                            & Mortes    & 31.153        & -184.661      & 249.452 \\ 
-VAR antes *                 & Mortes    & -16.403       & -106.588      & 73.782  \\ 
-\\[-1.8ex] 
-IRF soma                   & Mortes    & 281.094    & -70.080       & 430.981 \\
-IRF soma *                  & Mortes    & 467.088       & -116.451        & 716.150 \\
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
-Obs: & \multicolumn{4}{r}{''*'': estimado com o valor de casos real}
-\end{tabular} 
-\end{table} 
 
 
 \let\clearpage\relax
 \chapter{Conclusão}
+
 Nesta tese, foram desenvolvidas diferentes abordagens para medir medido efeito das vacinas no número de casos mortes que o Brasil apresentou durante a pandemia do COVID-19.
 
-Motivado pela natureza de dinâmica temporal entre as variáveis, como explicada no modelo teórico SIRDV, foi realizada uma modelagem SVAR, incomum na literatura epidemiológica. A identificação do modelo também foi feita consistentemente com a teoria.
+O uso de um modelo SVAR se mostrou atrativo. O modelo teórico SIRDV e os dados explicitaram a natureza de dinâmica temporal entre as variáveis; a teoria epidemiológica motivou a identificação estrutural; e foi possível obter diversas ordens de resultados.
 
-A abordagem mais robusta comparou as IRF's de SVAR'es estimados antes e depois do início da vacinação, controlando possíveis falhas na especificação do modelo ao analisar como a vacina o altera. Essa abordagem mostrou a variação na soma da resposta em mortes, dado um choque de 1000 casos, é de 18.21 em termos absolutos, e 81\% em termos proporcionais. Isto é, a taxa de mortalidade de um choque de casos foi diminuída drasticamente após o início da política de vacinação, mostrando o quão eficaz esta foi.
+A abordagem mais robusta comparou as IRF's de SVAR'es estimados antes e depois do início da vacinação, controlando possíveis falhas na especificação do modelo ao analisar como a vacina o altera. Essa abordagem mostrou a mudança na soma da resposta em mortes, dado um choque de $1000$ casos, é de $10,24$ em termos absolutos, e $60$\% em termos proporcionais, indicando o alto nível de eficiência da política de vacinação.
 
-A outra abordagem foi a criação de um contrafactual para estimar o efeito agregado da vacinação. Foi identificado um \textit{lower} e um \textit{upper bound} de, respectivamente 31mil e 281mil vidas salvas até set/2020, sendo que o segundo apresenta indícios de superestimação, mas é mais consistente com a redução forte das IRF's discutida acima.
+A outra abordagem foi a criação de um contrafactual para estimar o efeito agregado da vacinação. Foi identificado um \textit{lower} e um \textit{upper bound} de, respectivamente $16$ mil e $279$ mil vidas salvas até mar/2023. O valor real deve se encontrar longe dos \textit{bounds} uma vez que os valores apresentam indícios de sub/superestimação (respectivamente). Também foi criado um contrafactual com base na redução da IRF comentada anteriormente, e este é mais consistente com uma redução da ordem do supracitado \textit{upper bound}.
 
-Esta tese apresentou mais uma metodologia para atestar a eficiência da vacinação, servindo como mais um insumo para a busca de um consenso na literatura e fim da desinformação, além de ser mais uma ferramenta para os \textit{policymakers} definirem o gasto e urgência ótima para as políticas de vacinação. Além disso, é a primeira que utiliza uma metodologia SVAR para a pandemia do COVID-19, e mostrou que existe a capacidade de obter resultados mais informativos que apenas o efeito agregado da vacinação.
+Esta tese apresentou mais uma metodologia para atestar a eficiência da vacinação, servindo como mais um insumo para a busca de um consenso na literatura e fim da desinformação, além de ser mais uma ferramenta para os \textit{policymakers} definirem o gasto e urgência ótima para as políticas de vacinação.
 
-O potencial da metodologia não foi explorado até o fim, existe espaço para a busca de novas técnicas de identificação, busca de dados de melhor qualidade, e inclusão do distanciamento social nos modelos. Com isso seria possível aprimorar as estimativas obtidas, e tornar possível analisar as IRF's de vacinas em mortes e casos, gerando um resultado de efeito marginal muito útil. Similarmente, existe muito espaço para aplicações dessa metodologia em outros contextos para evidenciar seu bom funcionamento.
+O potencial da metodologia não foi explorado até o fim, existe espaço para a busca de novas técnicas de identificação, busca de dados de melhor qualidade, inclusão do distanciamento social e não linearidade nos modelos. Com isso, seria possível aprimorar as estimativas obtidas, e possibilitar analisar as IRF's de vacinas em mortes e casos, gerando um resultado de efeito marginal muito útil. Similarmente, existe muito espaço para aplicações dessa metodologia em outros contextos para evidenciar seu bom funcionamento.
 
 
 
-% ----------------------------------------------------------
-% ELEMENTOS PÓS-TEXTUAIS
-% ----------------------------------------------------------
+% ELEMENTOS PÓS TEXTUAIS ----------------------------------------
 \postextual
 
-% ---
-% Referências bibliográficas
+% Referências bibliográficas:
 \newpage
 \printbibliography
-% ---
 
-% ---
-% Apêndices
+% Apêndices:
 \newpage
 \begin{apendicesenv}
-\chapter{Resultados da Análise de Contrafactual}\label{ap:count}
-\begin{table}[H] \centering 
-\renewcommand{\arraystretch}{1.2}
-  \caption{Diferença do Contrafactual e do Realizado}\label{tb:counter} 
-\begin{tabular}{@{\extracolsep{5pt}} llccc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
-Método & Série & Diferença & Int. inferior & Int. superior \\ 
-\hline \\[-1.8ex] 
-\multirow{2}{*}{VAR antes}  & Casos     & -8.007.319    & -17.294.129   & 2.512.505 \\ 
-                            & Mortes    & 31.153        & -184.661      & 249.452 \\ 
-\multirow{2}{*}{VAR depois} & Casos     & -1.389.775    & -15.044.853   & 19.651.972 \\ 
-                            & Mortes    & -201.148      & -279.654      & -27.897 \\
-\\[-1.8ex] 
-VAR antes *                 & Mortes    & -16.403       & -106.588      & 73.782  \\ 
-VAR depois *                & Mortes    & -40.882       & -126.171      & 44.408  \\ 
-\\
-IRF pico                    & Mortes    & 114.691       & 7.254         & 158.067 \\
-IRF soma                    & Mortes    & 281.094       & -70.080       & 430.981 \\
-\\[-1.8ex] 
-IRF pico *                  & Mortes    & 190.580       & 12.055        & 262.656 \\
-IRF soma *                  & Mortes    & 467.088       & -116.451        & 716.150 \\
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
-Obs: & \multicolumn{4}{r}{''*'': estimado com o valor de casos real}
-\end{tabular} 
-\end{table} 
+
+\chapter{IRF's Individuais}\label{ap:single}
+
+Como foi explicado, a identificação dos choques não é muito robusta, e existem variáveis omitidas no modelo, de modo que a análise das IRF's individualmente não é prioritária. De qualquer forma, pode-se vê-las na figura \ref{fig:apirf}. De fato, contra o que as análises mais robustas indicam, o efeito da vacina em casos e mortes não se mostra negativo.
+
+\begin{figure}[H]
+    \centering
+    \caption{IRF's do modelo (5)}
+    \includegraphics[width = 0.95\textwidth]{Figuras/ap_irfs.png}
+    \label{fig:apirf}
+ \end{figure}
+
+ Outro possível objeto de interesse são as \textit{Forecast Error Variance Decomposition} (FEVD), que indicam a fração da contribuição de cada variável para a variância da previsão de cada equação. A figura \ref{fig:apfevd}As vacinas parecem explicar uma maior porcentagem da variância nas mortes do que dos casos, embora não seja o \textit{driver} majoritário em nenhum dos dois.
+
+ \begin{figure}[H]
+    \centering
+    \caption{FEVD's do modelo (5)}
+    \includegraphics[width = 0.95\textwidth]{Figuras/ap_fevd.png}
+    \label{fig:apfevd}
+ \end{figure}
+
 
 
 \chapter{Diagnósticos do VAR}\label{ap:diag}
-Antes de sua inclusão no VAR \eqref{eq:var3}, foi realizado um teste de raiz unitária sobre as séries, apresentado na tabela \ref{tb:testadf}. Podemos ver que apenas nenhuma série é estacionária.
+Antes de sua inclusão no VAR \eqref{eq:var5}, foi realizado um teste de raiz unitária sobre as séries, apresentado na tabela \ref{tb:testadf}. Podemos ver que apenas a variável de casos é estacionária. Uma boa especificação do modelo pareceu lidar bem com essa limitação.
 
 \begin{table}[H] \centering 
   \caption{Teste Dickey-Fuller Aumentado} 
   \label{tb:testadf} 
-\begin{tabular}{@{\extracolsep{5pt}} ccccc} 
+\begin{tabular}{@{\extracolsep{5pt}} cccc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
- & Variável & Estatística & Lag & P-valor \\ 
+Variável & Estatística & Lag & P-valor \\ 
 \hline \\[-1.8ex] 
-1 & Vacinas & -2.78 & 4 & 0.26 \\ 
-2 & Casos & -2.36 & 4 & 0.43 \\ 
-3 & Mortes & -2.66 & 4 & 0.30 \\ 
+Casos & -3.61 & 5 & 0.03 \\ 
+Vacinas & -2.97 & 4 & 0.17 \\ 
+Mortes & -2.71 & 5 & 0.28 \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table} 
 
-A comparação do fit do modelo VAR e os valores reais, bem como o resíduo resultante, está presente na figura \ref{fig:varfit}. A distribuição dos resíduos parece relativamente ter uma volatilidade similar ao longo da reta de valores fitados, e de fato, o teste ARCH-LM não indicou a presença de erros ARCH no modelo -- estatística do teste de $206.61$, com $180$ graus de liberdade, gerando um p-valor $< 0.0848$.
+A comparação do fit do modelo VAR e os valores reais, bem como o resíduo resultante, está presente na figura \ref{fig:varfit}. A distribuição dos resíduos parece relativamente ter uma volatilidade similar ao longo da reta de valores fitados, e de fato, o teste ARCH-LM não indicou a presença de erros ARCH no modelo -- estatística do teste de $206,61$, com $180$ graus de liberdade, gerando um p-valor $< 0,0848$. O R quadrado de cada equação é: Casos $0,960$, Vacinas $0,918$, Mortes $0,988$
 
 \begin{figure}[H]
     \centering
-    \caption{Fit do VAR}
-    \includegraphics[width = 0.84\textwidth]{Figuras/varfit.png}
+    \caption{Fit e resíduos}
+    \includegraphics[width = 0.95\textwidth]{Figuras/diag_fit-res.png}
     \label{fig:varfit}
 \end{figure}
 
-Podemos ver mais detalhes dos resíduos na figura \ref{fig:varresdist}, que mostra uma variância dos resíduos não tão dependente dos valores do modelo, mas uma distribuição não exatamente normal. Realmente, o teste Jarque-Bera multivariado indica erros não normais -- estatística do teste de $42.113$, com 6 graus de liberdade, gerando um p-valor de $1.747e-07$. Embora isso comprometa em alguma medida os testes de hipótese, principalmente do teste de causalidade de Granger, esse resultado não é um grande problema.
+Podemos ver mais detalhes dos resíduos na figura \ref{fig:varresdist}, que mostra uma variância dos resíduos não tão dependente dos valores do modelo, mas uma distribuição não exatamente normal. Realmente, o teste Jarque-Bera multivariado indica erros não normais -- estatística do teste de $42,113$, com $6$ graus de liberdade, gerando um p-valor de $1,747e-07$. Dito isso, esse resultado não compromete nenhuma hipótese deste trabalho.
 
 \begin{figure}[H]
     \centering
-    \caption{Distribuição dos resíduos do VAR}
-    \includegraphics[]{Figuras/varresdist.png} %width = 0.84\textwidth
+    \caption{Dispersão e distribuição dos resíduos}
+    \includegraphics[width = 0.95\textwidth]{Figuras/diag_disp-dist.png}
     \label{fig:varresdist}
 \end{figure}
 
-A figura \ref{fig:varresacf} mostra as autocorrelações dos resíduos, indicando dependência temporal insignificante das e entre as variáveis. De fato, o modelo passou teste Portmanteau de autocorrelação dos resíduos (em até 12 lags) -- estatística do teste de 123.54, com 117 graus de liberdade, gerando um p-valor = 0.3215. Similarmente, o teste Edgerton-Shukur também rejeitou a presença de autocorrelação.
+A figura \ref{fig:varresacf} mostra as autocorrelações dos resíduos, indicando dependência temporal insignificante das e entre as variáveis. De fato, o modelo passou teste Portmanteau de autocorrelação dos resíduos (em até $12$ lags) -- estatística do teste de $123,54$, com $126$ graus de liberdade, gerando um p-valor = $0,3215$. Similarmente, o teste Edgerton-Shukur também rejeitou a presença de autocorrelação.
 
 \begin{figure}[H]
     \centering
-    \caption{Autocorrelações dos resíduos do VAR}
-    \includegraphics[]{Figuras/varresacf.png} %width = 0.84\textwidth
+    \caption{Correlação cruzada e parcial dos resíduos}
+    \includegraphics[width = 0.95\textwidth]{Figuras/diag_acf.png}
     \label{fig:varresacf}
 \end{figure}
 
-A figura \ref{fig:varstab} mostra o teste CUMSUM baseado nos resíduos das equações MQO, mais especificamente, é o resultado da função ``stability'' do pacote ``vars'' com o método ``CUMSUM-OLS'' no R. Ela indica que alterar a amostra que baseou a estimativa do modelo não altera drasticamente os valores dos coeficientes.
+A figura \ref{fig:varstab} mostra a estabilidade dos resíduos do modelo, mais especificamente, o resultado da função ``stability'' do pacote ``vars'' com o método ``CUMSUM-OLS'' no R. Ela indica que alterar a amostra que baseou a estimativa do modelo não altera drasticamente os valores dos coeficientes.
 
 \begin{figure}[H]
     \centering
-    \caption{Estabilidade do VAR}
-    \includegraphics[]{Figuras/varstab.png}
+    \caption{Estabilidade dos resíduos}
+    \includegraphics[width = 0.95\textwidth]{Figuras/diag_stab.png}
     \label{fig:varstab}
 \end{figure}
 
-Vale atentar que as raízes do VAR são todas menores que 1: $0.909 (<1)$,	$0.886 (<1)$,	$0.886 (<1)$,	$0.754 (<1)$,	$0.754 (<1)$,	$0.563 (<1)$,	$0.563 (<1)$,	$0.522 (<1)$,	$0.522 (<1)$.
-
-Por fim, o R quadrado de cada equação é: Casos 0.960, Vacinas 0.918, Mortes 0.988
+Vale atentar que as raízes do VAR são todas menores que 1: $0,909 (<1)$,	$0,886 (<1)$,	$0,886 (<1)$,	$0,754 (<1)$,	$0,754 (<1)$,	$0,563 (<1)$,	$0,563 (<1)$,	$0,522 (<1)$,	$0,522 (<1)$.
 
 \newpage
 
 \end{apendicesenv}
-% ---
 
 \end{document}
