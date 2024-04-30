@@ -8,12 +8,6 @@ Finding evidence for the effectiveness of COVID vaccines is very important to gu
 **Keywords:** Coronavirus. Vaccination. Causal Effect. SVAR
 
 
-## Directories
-The "Latex" directory has the .tex files to generate the paper .pdf
-
-The "R (covid-svardiff)" has the R files related to the empirical (and reproducible) analisys
-
-
 ## Future Changes
 There are still some work to do. Besides what I list as "possible future expansions" in the text, which I won't be doing in this paper, there are still some improvements I want to do in the near future:
 
