@@ -26,7 +26,7 @@
 
 % Cores:
 \usepackage{xcolor}
-\makeatletter % criar paletta "Dark2" do RColorBrewer (pacote do R)
+\makeatletter % criar paleta "Dark2" do RColorBrewer (pacote do R)
 \newcounter{j}
 \@for\i:={1B9E77, D95F02, 7570B3, E7298A, 66A61E, E6AB02, A6761D, 666666}\do{
     \stepcounter{j}
@@ -40,7 +40,7 @@
 \usetikzlibrary{positioning, shapes.geometric, backgrounds, chains, arrows.meta}
 
 % Referências:
-\usepackage[backend=biber, style=apa]{biblatex} 
+\usepackage[backend=biber, style=apa]{biblatex}
 \usepackage{csquotes} % requerimento do biblatex
 
 % Matemática
@@ -65,7 +65,7 @@
 \usepackage{float} % float options
 \usepackage{multirow}
 \input{configs.tex} % outras configurações em arquivo separado
-\addbibresource{references.bib}
+\addbibresource{bibliography.bib}
 
 
 
@@ -217,7 +217,7 @@ Gostaria de agradecer o professor Marcel Bertini Ribeiro pelo incrível esforço
 \newpage
 \begin{resumo}[Abstract]
 \begin{otherlanguage*}{english}
-   Finding evidence for the effectiveness of COVID vaccines is very important to guide the action of policymakers, especially considering how recent the pandemic is. This thesis contributes to literature by using an Structural Vector Auto-Regression to model the relationship between the variables, motivated by and identifyed by a SIR epidemiological model. The capture of temporal dynamics between variables, the relaxation of assumptions on infection, mortality, and vaccination rates constant over time, as well as the potential of generating different types of results are this method’s main benefits. It was discovered that the response of deaths to a shock of $1000$ cases was $60$\% (or $10,24$, in absolute terms) less than after the inclusion of vaccines. There was also an analysis of counterfactuals, indicating that the number of lives saved goes from \textit{lower bound} of $16$ thousand to a \textit{upper bound} of $279$ thousand, with clues to a proximity to the latter.
+   Finding evidence for the effectiveness of COVID vaccines is very important to guide the action of policymakers, especially considering how recent the pandemic is. This thesis contributes to literature by using an Structural Vector Auto-Regression to model the relationship between the variables, motivated by and identified by a SIR epidemiological model. The capture of temporal dynamics between variables, the relaxation of assumptions on infection, mortality, and vaccination rates constant over time, as well as the potential of generating different types of results are this method’s main benefits. It was discovered that the response of deaths to a shock of $1000$ cases was $60$\% (or $10,24$, in absolute terms) less than after the inclusion of vaccines. There was also an analysis of counterfactuals, indicating that the number of lives saved goes from a lower bound of $16$ thousand to a upper bound of $279$ thousand, with clues to a proximity to the latter.
 
    \vspace{\onelineskip}
  
@@ -464,7 +464,7 @@ Uma possível expansão seria desagregar a variável de vacinas entre 1$^\text{a
 
 A figura \ref{fig:histval} mostra como as variáveis de interesse progrediram no tempo. Foram marcadas algumas ``ondas'' de casos e mortes. É especialmente interessante notar a diferença na proporção casos$/$mortes entre a primeira e segunda onda.
 
-Podemos ver que o \textit{timing} das ondas não parece ser explicado apenas pelas três variáveis, e, de encontro com o descrito no modelo SIRDV, trabalhos como \textcite{Moraes2021} indicam que o relaxamento do distanciamento social é uma de suas causas. Como não temos dados de distanciamento, foram incluídas tendências determinísticas quadráticas no modelo SVAR, com o intuíto de ajudar no controle desses \textit{drivers} exógenos das ondas.
+Podemos ver que o \textit{timing} das ondas não parece ser explicado apenas pelas três variáveis, e, de encontro com o descrito no modelo SIRDV, trabalhos como \textcite{Moraes2021} indicam que o relaxamento do distanciamento social é uma de suas causas. Como não temos dados de distanciamento, foram incluídas tendências determinísticas quadráticas no modelo SVAR, com o intuito de ajudar no controle desses \textit{drivers} exógenos das ondas.
 
 \begin{figure}[H]
     \centering
@@ -547,7 +547,7 @@ Todo o trabalho computacional foi realizado utilizando o \textit{software} R com
 \let\clearpage\relax
 \chapter{Resultados e discussão}
 
-A seção \ref{sec:res1} calcula as IRF's dos cinco modelos VAR, utilizando os modelos SVAR, mostrando como a inclusão de vacinas afeta as funções. A seção \ref{sec:res2} constrói contrafactuais da não existência de vacinas com vários métodos diferentes, utilizando os modelos VAR, obtendo estimativas do efeito total da política de vacinação. O apdêndice \ref{ap:single} mostra a análise não prioritária das IRF's do modelo (SVAR) \eqref{eq:var5}.
+A seção \ref{sec:res1} calcula as IRF's dos cinco modelos VAR, utilizando os modelos SVAR, mostrando como a inclusão de vacinas afeta as funções. A seção \ref{sec:res2} constrói contrafactuais da não existência de vacinas com vários métodos diferentes, utilizando os modelos VAR, obtendo estimativas do efeito total da política de vacinação. O apêndice \ref{ap:single} mostra a análise não prioritária das IRF's do modelo (SVAR) \eqref{eq:var5}.
 
 Antes de apresentar os resultados principais, vale a pena mostrar como correlação entre $\hat{\varepsilon}^i_{Casos}$ e $\hat{\varepsilon}^i_{Mortes}$\footnote{$\hat{\varepsilon}^i$ indica vetor de resíduos do modelo (i).} diminuiu após o início da vacinação. Nos três modelos VAR, respectivamente: $\mathbb{COR}(\hat{\varepsilon}^i_{Mortes}, \hat{\varepsilon}^i_{Casos}) = 0,91$, $0,46$, $0,48$, $0,30$, e $0,30$. Esse fato é uma evidência preliminar sobre como a vacina alterou a relação entre os choques das variáveis. A comparação completa das correlações e das matrizes contemporâneas dos SVAR'res pode ser vista no apêndice \ref{ap:corres}.
 
@@ -613,7 +613,7 @@ Alguns comentários sobre cada abordagem:
     \item Por fim, todos os modelos utilizaram as tendências determinísticas. Embora no contrafactual as ondas poderiam não ter ocorrido, os métodos não tem poder para determinar isso\footnote{Adicionalmente, as ondas estão relacionadas ao surgimento de variantes, algo exógeno ao contrafactual.}.
 \end{itemize}
 
-Em suma, estamos mais interessados no método (ii*) como o mais concervador, (ii) como uma opção menos conservadora, e (iii*) como uma abordagem adicional, potencialmente superestimada.
+Em suma, estamos mais interessados no método (ii*) como o mais conservador, (ii) como uma opção menos conservadora, e (iii*) como uma abordagem adicional, potencialmente superestimada.
 
 Os resultados dos métodos (i) e (ii) podem ser vistos na figura \ref{fig:counter1}. A figura apresenta o intervalo de confiança de $80$\%. Como esperado, o método (i) é bastante errático, mas o outro segue as séries realizadas com muito mais precisão.
 
