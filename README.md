@@ -1,7 +1,7 @@
 # Covid SVAR Diff
 This is the repo for the revision of my graduation dissertation "Efeito Agregado das Vacinas do COVID-19 no Brasil, uma metodologia SVAR".
 
-The finished article is at [text.pdf](report.pdf). The data comes from Our World in Data and is at [Data/](Data/). The main script is [main.R](main.R), and the article is built with [text.tex](report.tex).
+The finished article is [text.pdf](text.pdf). The data comes from Our World in Data and is at [Data/](Data/). The main script is [main.R](main.R), and the article is built with [text.tex](text.tex).
 
 
 ## Abstract
