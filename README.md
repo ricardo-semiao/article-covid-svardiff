@@ -1,7 +1,15 @@
 # Article: Aggregated Effect of COVID-19 Vacination in Brazil, a SVAR Method
-This is the repo for the revision of my graduation dissertation "Efeito Agregado das Vacinas do COVID-19 no Brasil, uma metodologia SVAR".
 
-The finished article is [text.pdf](text.pdf). The data comes from Our World in Data and is at [Data/](Data/). The main script is [main.R](main.R), and the article is built with [text.tex](text.tex).
+Welcome! This is the repository for the revision of my graduation dissertation "Efeito Agregado das Vacinas do COVID-19 no Brasil, uma metodologia SVAR". The article is in portuguese, but i present the english abstract below. The finished article is [text.pdf](text.pdf). The data comes from Our World in Data and is at [data/](data/). The main script is [main.R](main.R), and the article is built with [text.tex](text.tex).
+
+Bem-vindo! Este é o repositório da revisão da minha dissertação de graduação "Efeito Agregado das Vacinas do COVID-19 no Brasil, uma metodologia SVAR". O artigo finalizado está em [text.pdf](text.pdf). Os dados são provenientes do Our World in Data e estão em [data/](data/). O script principal é [main.R](main.R), e o artigo é construído com [text.tex](text.tex).
+
+
+## Resumo
+
+Encontrar evidências para a efetividade das vacinas do COVID-19 é muito importante para guiar a ação de \textit{policymakers}, ainda mais dado o quão recente a pandemia é. Esta tese contribui com essa literatura utilizando uma \textit{Structural Vector Auto-Regression} para modelar a relação entre as variáveis, motivada e identificada por um modelo epidemiológio SIR. A captura das dinâmicas temporais entre as variáveis, o relaxamento de hipóteses de taxas de infecção, mortalidade, e vacinação constantes no tempo, e o potencial de gerar diferentes tipos de resultados, são os benefícios principais desse método. Foi descoberto que resposta de mortes à um choque de $1000$ casos foi $60$\% (ou $10,24$, em termos absolutos) menor depois da inclusão das vacinas. Também foi feita uma análise de contrafactuais, indicando que o número de vidas salvas vai de um \textit{lower bound} de $16$ mil a um \textit{upper bound} de $279$ mil, com indícios de maior proximidade do segundo.
+
+**Palavras-chave:** Coronavirus. Vacinação. Efeito Causal. SVAR.
 
 
 ## Abstract
@@ -10,10 +18,10 @@ Finding evidence for the effectiveness of COVID vaccines is very important to gu
 **Keywords:** Coronavirus. Vaccination. Causal Effect. SVAR.
 
 
-## Future Changes
-There are still some work to do. Besides what I list as "possible future expansions" in the text, which I won't be doing in this paper, there are still some improvements I want to do in the near future:
+## Mudanças Futuras
+Ainda há trabalho a ser feito. Além do que listo como "possíveis expansões futuras" no texto, que não farei neste artigo, ainda há algumas melhorias que desejo fazer em um futuro próximo:
 
-- Add bootstraps for the IRF's;
-- Study using more traditional SVAR counterfactual methods, like the one used by the R function `svars::cf`;
-- Update the diagnostics appendix;
-- Create an package with the "method"'s functions, and reorganize the code.
+- Adicionar bootstraps para os IRF's;
+- Estudar o uso de métodos de contrafactuais mais tradicionais do SVAR, como o utilizado pela função R `svars::cf`;
+- Atualizar o apêndice de diagnósticos;
+- Criar um pacote com as funções do "método" e reorganizar o código.
