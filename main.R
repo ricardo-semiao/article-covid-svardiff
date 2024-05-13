@@ -10,8 +10,8 @@ library(tidyverse)
 
 theme_set(theme_bw())
 
-source("functions.R")
-source("functions (package).R")
+source("scripts/utils_general.R")
+source("scripts/utils_results.R")
 
 
 
@@ -47,21 +47,28 @@ h <- 7 #plots heights
 
 
 # Data Import -------------------------------------------------------------
-#path <- "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
-#data_raw <- read_csv(path) %>% filter(location == "Brazil") %>% filter(row_number() >= which(!is.na(new_deaths))[1])
-#saveRDS(data_raw, "data_raw.RDS")
+if (FALSE) {
+  path <- "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
+  
+  data_raw <- read_csv(path) %>%
+    filter(location == "Brazil") %>%
+    filter(row_number() >= which(!is.na(new_deaths))[1])
+  
+  saveRDS(data_raw, "data/data_raw.RDS")
+}
+
 
 # Getting and transforming data:
+data <- get_basic_data(readRDS("data/data_raw.RDS"), trans, n_end)
+
 if (week) {
-  data <- get_basic_data(readRDS("data_raw.RDS"), trans, n_end) %>%
+  data <- data %>%
     group_by(week = format(date, "%Y-%U")) %>%
     summarise(
       date = median(date),
       across(-date, sum)
     ) %>%
     select(-week)
-} else {
-  data <- get_basic_data(readRDS("data_raw.RDS"), trans, n_end)
 }
 
 data <- data %>% select(all_of(c("date", vars_order))) #Cholesky reordering
@@ -103,10 +110,11 @@ ggvar_values(
   select(data, -date), index = data$date,
   args_facet = list(scales = "free_y", ncol = 1, labeller = labeller(serie = namings$vars))
 ) +
-  labs(title = NULL, x = "Lags", y = "Correlação") + #title: Valores históricos das séries
+  labs(title = NULL, x = "Lags", y = "Correlação") +
   scale_x_date(date_breaks = "6 months", date_labels = "%Y/%m") +
   scale_y_continuous(n.breaks = 3, labels = sci) +
   ggwaves()
+#title: Valores históricos das séries
 #custom_ggsave("stat_historic.png", w = w, h = h, scale = 1.5)
 
 # Correlations:
@@ -123,7 +131,8 @@ list(
     labs(title = NULL, x = NULL, y = "Correlação")
 ) %>%
   wrap_plots(nrow = 2, heights = c(3, 1)) +
-  plot_annotation(title = NULL) #title: Correlação cruzada e parcial das séries
+  plot_annotation(title = NULL)
+#title: Correlação cruzada e parcial das séries
 #custom_ggsave("stat_acf.png", w = w, h = h*1.25, scale = 1.5)
 
 # ADF tests:
@@ -197,7 +206,8 @@ ba_data$before <- select(ba_data$before, -vaccines)
 
 # CCF B&A:
 ccf_ba(ba_data, namings$ba_expl, lag.max = lag.max*3) +
-  labs(title = NULL) #title: Correlação mortes-casos pré e pós vacinas
+  labs(title = NULL)
+#title: Correlação mortes-casos pré e pós vacinas
 #custom_ggsave("stat_ba.png", w = w, h = h*0.75, scale = 1.5)
 
 # Granger tests B&A:
@@ -264,8 +274,9 @@ list(
     scale_y_continuous(n.breaks = 3, labels = sci)
 ) %>%
   wrap_plots(nrow = 2, heights = c(3, 2)) +
-  plot_annotation(title = NULL) #title: Fit e resíduos do VAR
-#custom_ggsave("diag_fit-res.png", w = w, h = h*1.25, scale = 1.5)
+  plot_annotation(title = NULL)
+#title: Fit e resíduos do VAR
+#custom_ggsave("diag_fit_res.png", w = w, h = h*1.25, scale = 1.5)
 
 logLik(mod)
 
@@ -283,7 +294,8 @@ list(
     labs(title = NULL, y = "Correlação")
 ) %>%
   wrap_plots(nrow = 2, heights = c(3, 1)) +
-  plot_annotation(title = NULL) #title: Correlação cruzada e parcial dos resíduos
+  plot_annotation(title = NULL)
+#title: Correlação cruzada e parcial dos resíduos
 #custom_ggsave("diag_acf.png", w = w, h = h*1.25, scale = 1.5)
 
 serial.test(mod, type = "PT.adjusted")
@@ -302,8 +314,9 @@ list(
     labs(title = NULL, x = "Resíduos", y = "Densidade")
 ) %>%
   wrap_plots(nrow = 2) +
-  plot_annotation(title = NULL) #title: Dispersão e distribuição dos resíduos
-#custom_ggsave("diag_disp-dist.png", w = w, h = h, scale = 1.5)
+  plot_annotation(title = NULL)
+#title: Dispersão e distribuição dos resíduos
+#custom_ggsave("diag_disp_dist.png", w = w, h = h, scale = 1.5)
 
 arch.test(mod)
 normality.test(mod)
@@ -313,7 +326,8 @@ ggvar_stability(stability(mod, type = "OLS-CUSUM"),
   args_hline = list(linetype = 2, color = pal[1]),
   args_facet = list(labeller = labeller(equation = namings$vars))
 ) +
-  labs(title = NULL, x = "Índice", y = "EFP") #title: Estabilidade dos resíduos
+  labs(title = NULL, x = "Índice", y = "EFP")
+#title: Estabilidade dos resíduos
 #custom_ggsave("diag_stab.png", w = w, h = h*0.75, scale = 1.5)
 
 # General VAR statistics
@@ -403,7 +417,8 @@ ba_irfs_deaths %>%
   geom_line() +
   geom_hline(yintercept = 0) +
   facet_wrap(vars(name), nrow = 1) +
-  labs(title = NULL) #title: IRF casos em mortes - modelos (1) a (5)
+  labs(title = NULL)
+#title: IRF casos em mortes - modelos (1) a (5)
 #custom_ggsave("res1_irfs.png", w = w, h = h*0.75, scale = 1.5)
 
 # IRF's sums and peaks:
@@ -452,12 +467,14 @@ cf_plots <- map(cf_preds, function(pred) {
 })
 
 wrap_plots(cf_plots[1:2], nrow = 2, byrow = TRUE, guides = "collect") +
-  plot_annotation(title = NULL) #title: Contrafactuais (i) e (ii)
-custom_ggsave("res2_cf1-2.png", w = w, h = h, scale = 1.5)
+  plot_annotation(title = NULL)
+#title: Contrafactuais (i) e (ii)
+#custom_ggsave("res2_cf_1_2.png", w = w, h = h, scale = 1.5)
 
 wrap_plots(cf_plots[3:4], nrow = 2, byrow = TRUE, guides = "collect") +
-  plot_annotation(title = NULL) #title: Contrafactuais (i*) e (ii*)
-custom_ggsave("res2_cf4-5.png", w = w, h = h, scale = 1.5)
+  plot_annotation(title = NULL)
+#title: Contrafactuais (i*) e (ii*)
+#custom_ggsave("res2_cf_4_5.png", w = w, h = h, scale = 1.5)
 
 # Differences:
 map_dfr(cf_preds, function(pred) {
@@ -514,7 +531,7 @@ ggplot(cf_irfs, aes(index, value, linetype = line)) +
   varutils:::create_sec_axis(xseclab = "Casos", yseclab = "Baseline") +
   labs(title = NULL, x = "Índice", y = "Valores", linetype = "Legenda")
 #title: Contrfactuais (iii) e (iii*)
-#custom_ggsave("res2_cf3-6.png", w = w, h = h, scale = 1.5)
+#custom_ggsave("res2_cf_3_6.png", w = w, h = h, scale = 1.5)
 
 cf_irfs_diff %>%
   group_by(base, type) %>%

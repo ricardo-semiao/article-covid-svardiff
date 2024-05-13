@@ -120,7 +120,7 @@ sci <- function(x) format(x, digits = 1, scientific = TRUE)
 
 
 custom_ggsave = function(filename, w, h, ...){
-  ggsave(paste0("../Latex/Figuras/", filename),
+  ggsave(paste0("figures/", filename),
          device = "png", width = w, height = h, units = "cm", ...
   )
 }

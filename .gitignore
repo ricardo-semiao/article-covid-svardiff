@@ -3,5 +3,6 @@
 .RData
 .Ruserdata
 covid-svardiff.Rproj
+covid-svardiff.code-workspace
 latex_build/
-Personal/
+personal/

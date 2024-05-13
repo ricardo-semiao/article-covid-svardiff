@@ -64,7 +64,8 @@
 %\usepackage{todonotes} % to do notes
 \usepackage{float} % float options
 \usepackage{multirow}
-\input{configs.tex} % outras configurações em arquivo separado
+
+\input{scripts/configs.tex} % outras configurações em arquivo separado
 \addbibresource{bibliography.bib}
 
 
@@ -469,7 +470,7 @@ Podemos ver que o \textit{timing} das ondas não parece ser explicado apenas pel
 \begin{figure}[H]
     \centering
     \caption{Valores históricos das séries}
-    \includegraphics[width = 0.95\textwidth]{Figures/stat_historic.png}
+    \includegraphics[width = 0.95\textwidth]{figures/stat_historic.png}
     \label{fig:histval}
 \end{figure}
 
@@ -478,7 +479,7 @@ A figura \ref{fig:acfall} apresenta as autocorrelações (padrões, parciais, e 
 \begin{figure}[H]
     \centering
     \caption{Correlação cruzada e parcial das séries}
-    \includegraphics[width = 0.95\textwidth]{Figures/stat_acf.png}
+    \includegraphics[width = 0.95\textwidth]{figures/stat_acf.png}
     \label{fig:acfall}
 \end{figure}
 
@@ -487,7 +488,7 @@ Essa última constatação é contraintuitiva, e pode indicar como pode ser limi
 \begin{figure}[H]
     \centering
     \caption{Correlação mortes-casos pré e pós vacinas}
-    \includegraphics[width = 0.95\textwidth]{Figures/stat_ba.png}
+    \includegraphics[width = 0.95\textwidth]{figures/stat_ba.png}
     \label{fig:ccfad}
 \end{figure}
 
@@ -559,7 +560,7 @@ O resultado principal deste trabalho é mostrar a diferença do impacto de um ch
 \begin{figure}[H]
     \centering
     \caption{IRF casos em mortes - modelos (1) a (5)}
-    \includegraphics[width = 0.95\textwidth]{Figures/res1_irfs.png}
+    \includegraphics[width = 0.95\textwidth]{figures/res1_irfs.png}
     \label{fig:IRF BaA}
 \end{figure}
 
@@ -620,7 +621,7 @@ Os resultados dos métodos (i) e (ii) podem ser vistos na figura \ref{fig:counte
 \begin{figure}[H]
     \centering
     \caption{Contrafactuais (i) e (ii)}
-    \includegraphics[width = 0.95\textwidth]{Figures/res2_cf1-2.png}
+    \includegraphics[width = 0.95\textwidth]{figures/res2_cf_1_2.png}
     \label{fig:counter1}
 \end{figure}
 
@@ -629,7 +630,7 @@ Os resultados dos métodos (i*) e (ii*) podem ser vistos na figura \ref{fig:coun
 \begin{figure}[H]
     \centering
     \caption{Contrafactuais (i*) e (ii*)}
-    \includegraphics[width = 0.95\textwidth]{Figures/res2_cf4-5.png}
+    \includegraphics[width = 0.95\textwidth]{figures/res2_cf_4_5.png}
     \label{fig:counter2}
 \end{figure}
 
@@ -638,7 +639,7 @@ A construção do contrafactual multiplicando a série de casos pela IRF sem vac
 \begin{figure}[H]
    \centering
    \caption{Contrafactuais (iii) e (iii*)}
-   \includegraphics[width = 0.95\textwidth]{Figures/res2_cf3-6.png}
+   \includegraphics[width = 0.95\textwidth]{figures/res2_cf_3_6.png}
    \label{fig:counter3}
 \end{figure}
 
@@ -718,7 +719,7 @@ A figura \ref{fig:varfit} apresenta o fit e os resíduos do modelo. A distribui�
 \begin{figure}[H]
     \centering
     \caption{Fit e resíduos}
-    \includegraphics[width = 0.95\textwidth]{Figures/diag_fit-res.png}
+    \includegraphics[width = 0.95\textwidth]{figures/diag_fit_res.png}
     \label{fig:varfit}
 \end{figure}
 
@@ -727,7 +728,7 @@ Podemos ver mais detalhes dos resíduos na figura \ref{fig:varresdist}, que most
 \begin{figure}[H]
     \centering
     \caption{Dispersão e distribuição dos resíduos}
-    \includegraphics[width = 0.95\textwidth]{Figures/diag_disp-dist.png}
+    \includegraphics[width = 0.95\textwidth]{figures/diag_disp_dist.png}
     \label{fig:varresdist}
 \end{figure}
 
@@ -736,7 +737,7 @@ A figura \ref{fig:varresacf} mostra as autocorrelações dos resíduos, indicand
 \begin{figure}[H]
     \centering
     \caption{Correlação cruzada e parcial dos resíduos}
-    \includegraphics[width = 0.95\textwidth]{Figures/diag_acf.png}
+    \includegraphics[width = 0.95\textwidth]{figures/diag_acf.png}
     \label{fig:varresacf}
 \end{figure}
 
@@ -745,7 +746,7 @@ A figura \ref{fig:varstab} mostra a estabilidade dos resíduos do modelo, mais e
 \begin{figure}[H]
     \centering
     \caption{Estabilidade dos resíduos}
-    \includegraphics[width = 0.95\textwidth]{Figures/diag_stab.png}
+    \includegraphics[width = 0.95\textwidth]{figures/diag_stab.png}
     \label{fig:varstab}
 \end{figure}
 
@@ -839,7 +840,7 @@ Como foi explicado, a identificação dos choques não é muito robusta, e exist
 \begin{figure}[H]
     \centering
     \caption{IRF's do modelo (5)}
-    \includegraphics[width = 0.95\textwidth]{Figures/ap_irfs.png}
+    \includegraphics[width = 0.95\textwidth]{figures/ap_irfs.png}
     \label{fig:apirf}
 \end{figure}
 
@@ -848,7 +849,7 @@ Outro possível objeto de interesse são as \textit{Forecast Error Variance Deco
 \begin{figure}[H]
     \centering
     \caption{FEVD's do modelo (5)}
-    \includegraphics[width = 0.95\textwidth]{Figures/ap_fevd.png}
+    \includegraphics[width = 0.95\textwidth]{figures/ap_fevd.png}
     \label{fig:apfevd}
 \end{figure}
 
